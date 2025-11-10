@@ -31,22 +31,53 @@ function App() {
               </span>
             </button>
 
-            <div className="hidden lg:flex items-center space-x-8">
-              {currentPage === 'home' ? (
-                <>
-                  <a href="#leistungen" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Leistungen</a>
-                  <a href="#vorteile" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Vorteile</a>
-                  <a href="#kontakt" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Kontakt</a>
-                  <a href="#kontakt" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-xl hover:shadow-lg transition-all font-medium">
-                    Beratung anfragen
-                  </a>
-                </>
-              ) : (
-                <button onClick={() => navigateToPage('home')} className="text-gray-700 hover:text-blue-600 transition-colors flex items-center font-medium">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Zurück zur Startseite
-                </button>
-              )}
+            <div className="hidden lg:flex items-center space-x-6">
+              <button
+                onClick={() => navigateToPage('home')}
+                className={`text-sm font-medium px-4 py-2 rounded-lg transition-all ${
+                  currentPage === 'home'
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigateToPage('thermostats')}
+                className={`text-sm font-medium px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
+                  currentPage === 'thermostats' || currentPage === 'hardware'
+                    ? 'bg-orange-100 text-orange-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Thermometer className="h-4 w-4" />
+                Thermostate
+              </button>
+              <button
+                onClick={() => navigateToPage('wlan')}
+                className={`text-sm font-medium px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
+                  currentPage === 'wlan'
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Wifi className="h-4 w-4" />
+                WLAN
+              </button>
+              <button
+                onClick={() => navigateToPage('support')}
+                className={`text-sm font-medium px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
+                  currentPage === 'support'
+                    ? 'bg-green-100 text-green-700'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Headphones className="h-4 w-4" />
+                Support
+              </button>
+              <a href="#kontakt" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-xl hover:shadow-lg transition-all font-medium ml-2">
+                Beratung anfragen
+              </a>
             </div>
 
             <button
@@ -59,21 +90,54 @@ function App() {
 
           {mobileMenuOpen && (
             <div className="lg:hidden py-4 border-t border-gray-200">
-              {currentPage === 'home' ? (
-                <div className="flex flex-col space-y-3">
-                  <a href="#leistungen" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium py-2">Leistungen</a>
-                  <a href="#vorteile" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium py-2">Vorteile</a>
-                  <a href="#kontakt" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium py-2">Kontakt</a>
-                  <a href="#kontakt" onClick={() => setMobileMenuOpen(false)} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl text-center font-medium">
-                    Beratung anfragen
-                  </a>
-                </div>
-              ) : (
-                <button onClick={() => navigateToPage('home')} className="text-gray-700 hover:text-blue-600 transition-colors flex items-center font-medium py-2">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Zurück zur Startseite
+              <div className="flex flex-col space-y-2">
+                <button
+                  onClick={() => navigateToPage('home')}
+                  className={`text-left px-4 py-3 rounded-lg transition-all font-medium ${
+                    currentPage === 'home'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Home
                 </button>
-              )}
+                <button
+                  onClick={() => navigateToPage('thermostats')}
+                  className={`text-left px-4 py-3 rounded-lg transition-all font-medium flex items-center gap-2 ${
+                    currentPage === 'thermostats' || currentPage === 'hardware'
+                      ? 'bg-orange-100 text-orange-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Thermometer className="h-4 w-4" />
+                  Thermostate
+                </button>
+                <button
+                  onClick={() => navigateToPage('wlan')}
+                  className={`text-left px-4 py-3 rounded-lg transition-all font-medium flex items-center gap-2 ${
+                    currentPage === 'wlan'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Wifi className="h-4 w-4" />
+                  WLAN
+                </button>
+                <button
+                  onClick={() => navigateToPage('support')}
+                  className={`text-left px-4 py-3 rounded-lg transition-all font-medium flex items-center gap-2 ${
+                    currentPage === 'support'
+                      ? 'bg-green-100 text-green-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Headphones className="h-4 w-4" />
+                  Support
+                </button>
+                <a href="#kontakt" onClick={() => setMobileMenuOpen(false)} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl text-center font-medium mt-2">
+                  Beratung anfragen
+                </a>
+              </div>
             </div>
           )}
         </div>
@@ -442,33 +506,33 @@ function App() {
 
       {currentPage === 'thermostats' && (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pb-16">
-          <section className="bg-gradient-to-br from-orange-50 to-white py-12 sm:py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <button onClick={() => navigateToPage('home')} className="flex items-center text-orange-600 hover:text-orange-700 mb-8 transition-colors font-medium">
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                Zurück zur Startseite
-              </button>
-
-              <div className="flex flex-col sm:flex-row items-center mb-6">
-                <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-4 rounded-2xl mr-0 sm:mr-6 mb-4 sm:mb-0 shadow-lg">
-                  <Thermometer className="h-12 w-12 text-white" />
+          <section className="relative bg-gradient-to-br from-orange-50 via-white to-orange-100 py-16 sm:py-20 overflow-hidden">
+            <div className="absolute inset-0 opacity-30">
+              <div className="absolute top-10 left-10 w-72 h-72 bg-orange-200 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-200 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+            </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center justify-center bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-3xl mb-6 shadow-2xl">
+                  <Thermometer className="h-16 w-16 text-white" />
                 </div>
-                <div className="text-center sm:text-left">
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Smarte Thermostate</h1>
-                  <p className="text-lg sm:text-xl text-gray-600 mt-2">Heizen Sie intelligent und sparen Sie Energie</p>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+                  Smarte Thermostate
+                </h1>
+                <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
+                  Intelligent heizen, Energie sparen & Komfort maximieren
+                </p>
+                <div className="inline-flex bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-gray-200">
+                  <a href="#warum" className="px-6 py-3 rounded-xl text-gray-700 hover:bg-orange-100 hover:text-orange-700 transition-all font-medium">
+                    Vorteile
+                  </a>
+                  <a href="#pakete" className="px-6 py-3 rounded-xl text-gray-700 hover:bg-orange-100 hover:text-orange-700 transition-all font-medium">
+                    Pakete
+                  </a>
+                  <button onClick={() => navigateToPage('hardware')} className="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-lg transition-all font-medium">
+                    Vergleich
+                  </button>
                 </div>
-              </div>
-
-              <div className="flex justify-center gap-3 mt-8 flex-wrap">
-                <a href="#warum" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
-                  Vorteile
-                </a>
-                <a href="#pakete" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
-                  Pakete
-                </a>
-                <button onClick={() => navigateToPage('hardware')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-xl hover:shadow-lg transition-all font-medium">
-                  Hardware-Vergleich
-                </button>
               </div>
             </div>
           </section>
@@ -476,34 +540,59 @@ function App() {
           <section id="warum" className="py-12 sm:py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Warum smarte Thermostate?</h2>
-                <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
-                  Mit intelligenten Thermostaten optimieren Sie Ihre Heizkosten und erhöhen gleichzeitig Ihren Wohnkomfort. Unsere Lösungen passen sich automatisch an Ihren Tagesablauf an und sorgen für die perfekte Temperatur – genau dann, wenn Sie sie brauchen.
-                </p>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-100 shadow-lg">
-                    <h3 className="font-bold text-gray-900 mb-2 text-lg">Energieeffizienz</h3>
-                    <p className="text-gray-600">Reduzieren Sie Ihre Heizkosten um bis zu 30% durch intelligente Steuerung und Automatisierung.</p>
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Warum smarte Thermostate?</h2>
+                  <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Mit intelligenten Thermostaten optimieren Sie Ihre Heizkosten und erhöhen gleichzeitig Ihren Wohnkomfort. Unsere Lösungen passen sich automatisch an Ihren Tagesablauf an.
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className="group bg-white p-8 rounded-3xl border-2 border-orange-100 hover:border-orange-300 shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
+                    <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-3 text-xl">Bis zu 30% sparen</h3>
+                    <p className="text-gray-600 leading-relaxed">Reduzieren Sie Ihre Heizkosten durch intelligente Steuerung und Automatisierung erheblich.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-100 shadow-lg">
-                    <h3 className="font-bold text-gray-900 mb-2 text-lg">Komfort</h3>
-                    <p className="text-gray-600">Steuern Sie Ihre Heizung von überall per App und genießen Sie immer die perfekte Raumtemperatur.</p>
+                  <div className="group bg-white p-8 rounded-3xl border-2 border-blue-100 hover:border-blue-300 shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
+                    <div className="bg-gradient-to-br from-blue-100 to-blue-200 w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-3 text-xl">Volle Kontrolle</h3>
+                    <p className="text-gray-600 leading-relaxed">Steuern Sie Ihre Heizung von überall per App und genießen Sie immer die perfekte Temperatur.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-100 shadow-lg">
-                    <h3 className="font-bold text-gray-900 mb-2 text-lg">Umweltschutz</h3>
-                    <p className="text-gray-600">Senken Sie Ihren CO₂-Ausstoß durch optimiertes Heizen und leisten Sie einen Beitrag zum Klimaschutz.</p>
+                  <div className="group bg-white p-8 rounded-3xl border-2 border-green-100 hover:border-green-300 shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
+                    <div className="bg-gradient-to-br from-green-100 to-green-200 w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-3 text-xl">Klimaschutz</h3>
+                    <p className="text-gray-600 leading-relaxed">Senken Sie Ihren CO₂-Ausstoß durch optimiertes Heizen und schonen Sie die Umwelt.</p>
                   </div>
                 </div>
               </div>
 
               <div id="pakete" className="mb-16">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">Unsere Pakete</h2>
-                <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
-                  <div className="bg-white border-2 border-gray-200 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Unsere Pakete</h2>
+                  <p className="text-lg text-gray-600 max-w-2xl mx-auto">Wählen Sie die perfekte Lösung für Ihr Zuhause</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                  <div className="group bg-white border-2 border-blue-200 rounded-3xl p-8 hover:shadow-2xl hover:border-blue-400 transition-all transform hover:-translate-y-1">
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="bg-gradient-to-br from-blue-100 to-blue-200 p-4 rounded-2xl">
+                        <Thermometer className="h-10 w-10 text-blue-600" />
+                      </div>
+                    </div>
                     <div className="text-center mb-6">
-                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Basis Paket</h3>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Basis Paket</h3>
                       <p className="text-gray-600 mb-4">TP-Link Hardware für normale Heizkörper</p>
-                      <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
+                      <div className="inline-block bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-full text-lg font-bold mb-2">Preis auf Anfrage</div>
                       <p className="text-sm text-gray-500">nach individueller Beratung</p>
                     </div>
 
@@ -542,19 +631,24 @@ function App() {
                       </li>
                     </ul>
 
-                    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
+                    <a href="#kontakt" className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center group-hover:scale-105">
                       Beratung anfragen
-                    </button>
+                    </a>
                   </div>
 
-                  <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-500 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all relative">
-                    <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-sm font-semibold shadow-lg">
-                      EMPFOHLEN
+                  <div className="group bg-gradient-to-br from-orange-50 to-white border-4 border-orange-400 rounded-3xl p-8 hover:shadow-2xl hover:border-orange-500 transition-all relative transform hover:-translate-y-1">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-xl">
+                      ⭐ EMPFOHLEN
                     </div>
-                    <div className="text-center mb-6 mt-4">
-                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Premium Paket</h3>
+                    <div className="flex items-center justify-center mb-6 mt-2">
+                      <div className="bg-gradient-to-br from-orange-400 to-orange-500 p-4 rounded-2xl shadow-lg">
+                        <Thermometer className="h-10 w-10 text-white" />
+                      </div>
+                    </div>
+                    <div className="text-center mb-6">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Premium Paket</h3>
                       <p className="text-gray-600 mb-4">tado° Hardware inkl. Fußbodenheizung</p>
-                      <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
+                      <div className="inline-block bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full text-lg font-bold mb-2 shadow-lg">Preis auf Anfrage</div>
                       <p className="text-sm text-gray-500">nach individueller Beratung</p>
                     </div>
 
@@ -601,21 +695,23 @@ function App() {
                       </li>
                     </ul>
 
-                    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
+                    <a href="#kontakt" className="block w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center group-hover:scale-105">
                       Beratung anfragen
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-200 shadow-lg">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Hardware im Detail</h3>
-                <p className="text-gray-600 mb-6">
-                  Möchten Sie mehr über die technischen Details und die verwendete Hardware erfahren? Schauen Sie sich unseren detaillierten Hardware-Vergleich an.
-                </p>
-                <button onClick={() => navigateToPage('hardware')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
-                  Hardware-Vergleich ansehen
-                </button>
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-8 sm:p-12 rounded-3xl shadow-2xl">
+                <div className="max-w-3xl mx-auto text-center">
+                  <h3 className="text-2xl sm:text-3xl font-bold mb-4">Noch unentschlossen?</h3>
+                  <p className="text-blue-100 mb-8 text-lg">
+                    Vergleichen Sie beide Systeme im Detail und finden Sie die perfekte Lösung für Ihr Zuhause.
+                  </p>
+                  <button onClick={() => navigateToPage('hardware')} className="bg-white text-blue-700 px-8 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg hover:scale-105 transform">
+                    Zum detaillierten Hardware-Vergleich
+                  </button>
+                </div>
               </div>
             </div>
           </section>
