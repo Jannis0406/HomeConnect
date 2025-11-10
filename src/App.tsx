@@ -1,7 +1,7 @@
 import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, MapPin, Check, ArrowLeft, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
-type Page = 'home' | 'thermostats' | 'wlan' | 'support' | 'impressum' | 'datenschutz';
+type Page = 'home' | 'thermostats' | 'wlan' | 'support' | 'impressum' | 'datenschutz' | 'hardware';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -592,13 +592,13 @@ function App() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-gray-200 shadow-lg">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Individuelle Lösungen</h3>
+              <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-200 shadow-lg">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Hardware im Detail</h3>
                 <p className="text-gray-600 mb-6">
-                  Benötigen Sie eine maßgeschneiderte Lösung für Ihr Zuhause oder Unternehmen? Wir erstellen Ihnen gerne ein individuelles Angebot, das perfekt auf Ihre Bedürfnisse zugeschnitten ist.
+                  Möchten Sie mehr über die technischen Details und die verwendete Hardware erfahren? Schauen Sie sich unseren detaillierten Hardware-Vergleich an.
                 </p>
-                <button onClick={() => navigateToPage('home')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
-                  Individuelle Beratung anfragen
+                <button onClick={() => navigateToPage('hardware')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
+                  Hardware-Vergleich ansehen
                 </button>
               </div>
             </div>
@@ -900,6 +900,434 @@ function App() {
               </p>
             </div>
           </div>
+        </div>
+      )}
+
+      {currentPage === 'hardware' && (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pb-16">
+          <section className="bg-gradient-to-br from-orange-50 to-white py-12 sm:py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <button onClick={() => navigateToPage('thermostats')} className="flex items-center text-orange-600 hover:text-orange-700 mb-8 transition-colors font-medium">
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Zurück zu Thermostaten
+              </button>
+
+              <div className="text-center mb-8">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Hardware-Vergleich</h1>
+                <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+                  Detaillierte Übersicht unserer Hardware-Komponenten im direkten Vergleich
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="py-12 sm:py-16 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid lg:grid-cols-2 gap-8 mb-16">
+                <div className="bg-white border-2 border-gray-200 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all">
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-6 py-3 rounded-2xl text-center mb-6">
+                    <h2 className="text-2xl sm:text-3xl font-bold">Basis Paket</h2>
+                    <p className="text-blue-100 mt-1">TP-Link Hardware</p>
+                  </div>
+
+                  <div className="space-y-8">
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-orange-100 p-2 rounded-lg mr-3">
+                          <Thermometer className="h-6 w-6 text-orange-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Thermostat: KE100</h3>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-xl mb-4">
+                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-4">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3">
+                              <Thermometer className="h-16 w-16 text-gray-600" />
+                            </div>
+                            <p className="text-sm text-gray-500">TP-Link KE100</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Für normale Heizkörper</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Mit allen gängigen Adaptern</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Display mit Temperaturanzeige</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Testsieger (IM TEST)</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                          <Home className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Hub: H100</h3>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-xl mb-4">
+                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-4">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3">
+                              <Home className="h-16 w-16 text-gray-600" />
+                            </div>
+                            <p className="text-sm text-gray-500">TP-Link H100</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Zentrale Steuereinheit</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Verbindet alle Geräte</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Kompaktes Design</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-green-100 p-2 rounded-lg mr-3">
+                          <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Fenstersensor: T110</h3>
+                        <span className="ml-2 text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-semibold">Optional</span>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-xl mb-4">
+                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-4">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3">
+                              <svg className="h-16 w-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                              </svg>
+                            </div>
+                            <p className="text-sm text-gray-500">Tapo T110</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Erkennt offene Fenster</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Automatische Heizungsabschaltung</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span>Gegen Aufpreis erhältlich</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-500 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all relative">
+                  <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-sm font-semibold shadow-lg">
+                    EMPFOHLEN
+                  </div>
+
+                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white px-6 py-3 rounded-2xl text-center mb-6 mt-8">
+                    <h2 className="text-2xl sm:text-3xl font-bold">Premium Paket</h2>
+                    <p className="text-orange-100 mt-1">tado° Hardware</p>
+                  </div>
+
+                  <div className="space-y-8">
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-orange-100 p-2 rounded-lg mr-3">
+                          <Thermometer className="h-6 w-6 text-orange-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Thermostat: Thermostat X</h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
+                        <div className="aspect-square bg-gradient-to-br from-orange-50 to-white rounded-lg flex items-center justify-center p-4">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3 shadow-lg">
+                              <Thermometer className="h-16 w-16 text-orange-600" />
+                            </div>
+                            <p className="text-sm font-semibold text-gray-900">tado° Thermostat X</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Premium Display mit Touch-Bedienung</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Für Heizkörper & Fußbodenheizung</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Mit allen gängigen Adaptern</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Deutscher Hersteller</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                          <Home className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Hub: HUB X</h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
+                        <div className="aspect-square bg-gradient-to-br from-orange-50 to-white rounded-lg flex items-center justify-center p-4">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-blue-100 to-blue-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3 shadow-lg">
+                              <Home className="h-16 w-16 text-blue-600" />
+                            </div>
+                            <p className="text-sm font-semibold text-gray-900">tado° HUB X</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Hochwertige Zentrale</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Erweiterte Funktionen</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Elegantes Design</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-green-100 p-2 rounded-lg mr-3">
+                          <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Fenster-Erkennung</h3>
+                        <span className="ml-2 text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">Integriert</span>
+                      </div>
+                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
+                        <div className="bg-gradient-to-br from-orange-50 to-white rounded-lg p-6">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-green-100 to-green-200 w-16 h-16 mx-auto rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                              <Check className="h-8 w-8 text-green-600" />
+                            </div>
+                            <p className="text-sm font-semibold text-gray-900">Bereits im System integriert</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Intelligente Temperaturerkennung</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Automatische Anpassung</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Ohne zusätzliche Sensoren</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center mb-4">
+                        <div className="bg-purple-100 p-2 rounded-lg mr-3">
+                          <Thermometer className="h-6 w-6 text-purple-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Fußbodenheizung</h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
+                        <div className="aspect-square bg-gradient-to-br from-orange-50 to-white rounded-lg flex items-center justify-center p-4">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3 shadow-lg">
+                              <Thermometer className="h-16 w-16 text-white" />
+                            </div>
+                            <p className="text-sm font-semibold text-gray-900">tado° Thermostat X</p>
+                            <p className="text-xs text-gray-500">Wandmontage</p>
+                          </div>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Speziell für Fußbodenheizung</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Elegantes Wandthermostat</span>
+                        </li>
+                        <li className="flex items-start">
+                          <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="font-medium">Präzise Temperaturregelung</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 sm:p-10 rounded-3xl shadow-2xl">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Direkt-Vergleich</h2>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-700">
+                        <th className="text-left py-4 px-4 font-semibold">Merkmal</th>
+                        <th className="text-center py-4 px-4 font-semibold">Basis Paket</th>
+                        <th className="text-center py-4 px-4 font-semibold bg-orange-900/30 rounded-t-xl">Premium Paket</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-sm">
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Hersteller</td>
+                        <td className="py-4 px-4 text-center">TP-Link (Tapo)</td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10">tado° (Deutschland)</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Heizkörper</td>
+                        <td className="py-4 px-4 text-center"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Fußbodenheizung</td>
+                        <td className="py-4 px-4 text-center"><X className="h-5 w-5 text-red-400 mx-auto" /></td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Fenster-Auf-Erkennung</td>
+                        <td className="py-4 px-4 text-center text-xs">Optional (extra Sensor)</td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10 text-xs">Integriert</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Display</td>
+                        <td className="py-4 px-4 text-center text-xs">Standard LED</td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10 text-xs">Premium Touch-Display</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">App-Steuerung</td>
+                        <td className="py-4 px-4 text-center"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Sprachsteuerung</td>
+                        <td className="py-4 px-4 text-center text-xs">Alexa, Google</td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10 text-xs">Alexa, Google, Siri</td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Geofencing</td>
+                        <td className="py-4 px-4 text-center"><X className="h-5 w-5 text-red-400 mx-auto" /></td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                      </tr>
+                      <tr className="border-b border-gray-700">
+                        <td className="py-4 px-4 font-medium">Wetter-Integration</td>
+                        <td className="py-4 px-4 text-center"><X className="h-5 w-5 text-red-400 mx-auto" /></td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
+                      </tr>
+                      <tr>
+                        <td className="py-4 px-4 font-medium">Preis</td>
+                        <td className="py-4 px-4 text-center text-xs">Auf Anfrage</td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10 rounded-b-xl text-xs">Auf Anfrage</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="mt-12 bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-200 shadow-xl">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 text-center">Welches Paket ist das richtige für Sie?</h3>
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div className="bg-white p-6 rounded-2xl border-2 border-gray-200">
+                    <h4 className="font-bold text-gray-900 mb-3 flex items-center">
+                      <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                        <Thermometer className="h-5 w-5 text-blue-600" />
+                      </div>
+                      Basis Paket empfohlen für:
+                    </h4>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Wohnungen mit normalen Heizkörpern</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Einstieg in Smart Home Heizung</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Kosteneffiziente Lösung</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span>Grundfunktionen sind ausreichend</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-300">
+                    <h4 className="font-bold text-gray-900 mb-3 flex items-center">
+                      <div className="bg-orange-100 p-2 rounded-lg mr-3">
+                        <Thermometer className="h-5 w-5 text-orange-600" />
+                      </div>
+                      Premium Paket empfohlen für:
+                    </h4>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="font-medium">Häuser mit Fußbodenheizung</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="font-medium">Maximale Energieeffizienz gewünscht</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="font-medium">Premium Design & Funktionen</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="font-medium">Erweiterte Smart Home Integration</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <button onClick={() => navigateToPage('home')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold inline-flex items-center">
+                    Jetzt beraten lassen
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       )}
     </div>
