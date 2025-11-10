@@ -347,9 +347,9 @@ function App() {
         <section className="min-h-screen p-12 bg-white">
           <h1 className="text-4xl font-bold mb-6">Impressum</h1>
           <p className="text-gray-700 mb-4">
-            HomeConnect GmbH<br />
-            Musterstraße 123<br />
-            10115 Berlin<br />
+            HomeConnect GbR<br />
+            Am breiten Stein 1<br />
+            36284 Hohenroda<br />
             Deutschland
           </p>
           <p className="text-gray-700 mb-4">Telefon: +49 (0) 30 1234 5678</p>
