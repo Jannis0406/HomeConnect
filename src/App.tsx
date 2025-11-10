@@ -1,5 +1,5 @@
 
-``tsx
+tsx
 import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, MapPin, X } from 'lucide-react';
 import { useState } from 'react';
 
