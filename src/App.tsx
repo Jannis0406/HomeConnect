@@ -449,33 +449,33 @@ function App() {
             </div>
           </section>
 
-          <footer className="bg-gradient-to-br from-white to-gray-800 text-gray-900 py-12">
+          <footer className="bg-gray-900 text-white py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <div>
                   <div className="flex items-center space-x-2 mb-4">
                     <div className="bg-blue-600 p-2 rounded-lg">
-                      <Home className="h-5 w-5 text-gray-900" />
+                      <Home className="h-5 w-5 text-white" />
                     </div>
                     <span className="text-lg font-bold">HomeConnect Solutions</span>
                   </div>
-                  <p className="text-gray-500">
+                  <p className="text-gray-300">
                     Ihr Partner für intelligente Smart Home Lösungen in Deutschland.
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-bold mb-4">Leistungen</h3>
-                  <ul className="space-y-2 text-gray-500">
-                    <li><button onClick={() => navigateToPage('thermostats')} className="hover:text-blue-700 transition-colors">Smarte Thermostate</button></li>
-                    <li><button onClick={() => navigateToPage('wlan')} className="hover:text-blue-700 transition-colors">WLAN-Optimierung</button></li>
-                    <li><button onClick={() => navigateToPage('support')} className="hover:text-blue-700 transition-colors">IT-Support</button></li>
+                  <h3 className="font-bold mb-4 text-white">Leistungen</h3>
+                  <ul className="space-y-2 text-gray-300">
+                    <li><button onClick={() => navigateToPage('thermostats')} className="hover:text-blue-400 transition-colors">Smarte Thermostate</button></li>
+                    <li><button onClick={() => navigateToPage('wlan')} className="hover:text-blue-400 transition-colors">WLAN-Optimierung</button></li>
+                    <li><button onClick={() => navigateToPage('support')} className="hover:text-blue-400 transition-colors">IT-Support</button></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-bold mb-4">Kontakt</h3>
-                  <ul className="space-y-2 text-gray-500">
+                  <h3 className="font-bold mb-4 text-white">Kontakt</h3>
+                  <ul className="space-y-2 text-gray-300">
                     <li className="flex items-center">
                       <Phone className="h-4 w-4 mr-2" />
                       <span>Auf Anfrage</span>
@@ -488,15 +488,15 @@ function App() {
                 </div>
 
                 <div>
-                  <h3 className="font-bold mb-4">Rechtliches</h3>
-                  <ul className="space-y-2 text-gray-500">
-                    <li><button onClick={() => navigateToPage('impressum')} className="hover:text-blue-700 transition-colors">Impressum</button></li>
-                    <li><button onClick={() => navigateToPage('datenschutz')} className="hover:text-blue-700 transition-colors">Datenschutz</button></li>
+                  <h3 className="font-bold mb-4 text-white">Rechtliches</h3>
+                  <ul className="space-y-2 text-gray-300">
+                    <li><button onClick={() => navigateToPage('impressum')} className="hover:text-blue-400 transition-colors">Impressum</button></li>
+                    <li><button onClick={() => navigateToPage('datenschutz')} className="hover:text-blue-400 transition-colors">Datenschutz</button></li>
                   </ul>
                 </div>
               </div>
 
-              <div className="border-t border-gray-200 pt-8 text-center text-gray-500">
+              <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
                 <p>&copy; 2025 HomeConnect Solutions. Alle Rechte vorbehalten.</p>
               </div>
             </div>
