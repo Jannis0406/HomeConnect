@@ -402,24 +402,32 @@ function App() {
                 <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                   <div className="bg-white border-2 border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-shadow">
                     <div className="text-center mb-6">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Basic Paket</h3>
-                      <p className="text-gray-600 mb-4">Perfekt für den Einstieg</p>
-                      <div className="text-4xl font-bold text-orange-600 mb-2">299€</div>
-                      <p className="text-sm text-gray-500">einmalig + Installation</p>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Basis Paket</h3>
+                      <p className="text-gray-600 mb-4">TP-Link Hardware für normale Heizkörper</p>
+                      <div className="text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
+                      <p className="text-sm text-gray-500">nach individueller Beratung</p>
                     </div>
 
                     <ul className="space-y-3 mb-8">
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">2 smarte Thermostate</span>
+                        <span className="text-gray-700">TP-Link smarte Thermostate</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Basis App-Steuerung</span>
+                        <span className="text-gray-700">Nur für normale Heizkörper (keine Fußbodenheizung)</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Zeitpläne & Automatisierung</span>
+                        <span className="text-gray-700">App-Steuerung & Automatisierung</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">Zeitpläne & Szenarien</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">Fenster-Auf-Erkennung (gegen Aufpreis mit extra Sensor)</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
@@ -427,16 +435,16 @@ function App() {
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">1 Jahr Garantie</span>
+                        <span className="text-gray-700">Herstellergarantie</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Telefon-Support</span>
+                        <span className="text-gray-700">Support & Beratung</span>
                       </li>
                     </ul>
 
                     <button className="w-full bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold">
-                      Jetzt anfragen
+                      Beratung anfragen
                     </button>
                   </div>
 
@@ -446,15 +454,19 @@ function App() {
                     </div>
                     <div className="text-center mb-6">
                       <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Paket</h3>
-                      <p className="text-gray-600 mb-4">Maximale Kontrolle & Effizienz</p>
-                      <div className="text-4xl font-bold text-orange-600 mb-2">599€</div>
-                      <p className="text-sm text-gray-500">einmalig + Installation</p>
+                      <p className="text-gray-600 mb-4">tado° Hardware inkl. Fußbodenheizung</p>
+                      <div className="text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
+                      <p className="text-sm text-gray-500">nach individueller Beratung</p>
                     </div>
 
                     <ul className="space-y-3 mb-8">
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">5 smarte Thermostate</span>
+                        <span className="text-gray-700 font-medium">tado° smarte Thermostate (deutscher Hersteller)</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-medium">Kompatibel mit Fußbodenheizung</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
@@ -462,15 +474,19 @@ function App() {
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">KI-gestützte Heizungsoptimierung</span>
+                        <span className="text-gray-700 font-medium">Intelligente Heizungssteuerung</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">Fenster-Auf-Erkennung</span>
+                        <span className="text-gray-700 font-medium">Fenster-Auf-Erkennung (integriert)</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">Sprachsteuerung (Alexa, Google)</span>
+                        <span className="text-gray-700 font-medium">Sprachsteuerung (Alexa, Google, Siri)</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 font-medium">Geofencing & Wetterdaten-Integration</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
@@ -478,20 +494,16 @@ function App() {
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">3 Jahre Garantie</span>
+                        <span className="text-gray-700 font-medium">Herstellergarantie</span>
                       </li>
                       <li className="flex items-start">
                         <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">24/7 Premium-Support</span>
-                      </li>
-                      <li className="flex items-start">
-                        <Check className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700 font-medium">Energieverbrauchs-Analyse & Reporting</span>
+                        <span className="text-gray-700 font-medium">Premium-Support & Beratung</span>
                       </li>
                     </ul>
 
                     <button className="w-full bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold">
-                      Jetzt anfragen
+                      Beratung anfragen
                     </button>
                   </div>
                 </div>
