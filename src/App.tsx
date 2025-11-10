@@ -1,10 +1,11 @@
-import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, MapPin, X, Check, ArrowLeft } from 'lucide-react';
+import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, MapPin, Check, ArrowLeft, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 type Page = 'home' | 'thermostats' | 'wlan' | 'support' | 'impressum' | 'datenschutz';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -12,67 +13,120 @@ function App() {
 
   const navigateToPage = (page: Page) => {
     setCurrentPage(page);
+    setMobileMenuOpen(false);
     scrollToTop();
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <button onClick={() => navigateToPage('home')} className="flex items-center space-x-2">
-              <Home className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">HomeConnect</span>
+          <div className="flex justify-between items-center h-20">
+            <button onClick={() => navigateToPage('home')} className="flex items-center space-x-3 group">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-2 rounded-xl group-hover:scale-110 transition-transform">
+                <Home className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                HomeConnectSolutions
+              </span>
             </button>
-            <div className="hidden md:flex space-x-8">
+
+            <div className="hidden lg:flex items-center space-x-8">
               {currentPage === 'home' ? (
                 <>
-                  <a href="#leistungen" className="text-gray-700 hover:text-blue-600 transition-colors">Leistungen</a>
-                  <a href="#vorteile" className="text-gray-700 hover:text-blue-600 transition-colors">Vorteile</a>
-                  <a href="#kontakt" className="text-gray-700 hover:text-blue-600 transition-colors">Kontakt</a>
+                  <a href="#leistungen" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Leistungen</a>
+                  <a href="#vorteile" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Vorteile</a>
+                  <a href="#kontakt" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">Kontakt</a>
+                  <a href="#kontakt" className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-xl hover:shadow-lg transition-all font-medium">
+                    Beratung anfragen
+                  </a>
                 </>
               ) : (
-                <button onClick={() => navigateToPage('home')} className="text-gray-700 hover:text-blue-600 transition-colors flex items-center">
-                  <ArrowLeft className="h-4 w-4 mr-1" />
+                <button onClick={() => navigateToPage('home')} className="text-gray-700 hover:text-blue-600 transition-colors flex items-center font-medium">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Zurück zur Startseite
                 </button>
               )}
             </div>
-            {currentPage === 'home' && (
-              <a href="#kontakt" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                Beratung anfragen
-              </a>
-            )}
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
+
+          {mobileMenuOpen && (
+            <div className="lg:hidden py-4 border-t border-gray-200">
+              {currentPage === 'home' ? (
+                <div className="flex flex-col space-y-3">
+                  <a href="#leistungen" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium py-2">Leistungen</a>
+                  <a href="#vorteile" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium py-2">Vorteile</a>
+                  <a href="#kontakt" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-blue-600 transition-colors font-medium py-2">Kontakt</a>
+                  <a href="#kontakt" onClick={() => setMobileMenuOpen(false)} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl text-center font-medium">
+                    Beratung anfragen
+                  </a>
+                </div>
+              ) : (
+                <button onClick={() => navigateToPage('home')} className="text-gray-700 hover:text-blue-600 transition-colors flex items-center font-medium py-2">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Zurück zur Startseite
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </nav>
 
       {currentPage === 'home' && (
         <>
-          <section className="bg-gradient-to-br from-blue-50 to-white py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                  <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                    Intelligente Smart Home Lösungen für Ihr Zuhause
+          <section className="relative py-16 sm:py-24 lg:py-32 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-orange-50 opacity-60"></div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="text-center lg:text-left">
+                  <div className="inline-block mb-4 px-4 py-2 bg-blue-100 rounded-full">
+                    <span className="text-blue-700 font-semibold text-sm">Smart Home Experten</span>
+                  </div>
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                    Intelligente Lösungen für Ihr
+                    <span className="block bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
+                      smartes Zuhause
+                    </span>
                   </h1>
-                  <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                    Wir machen Ihr Zuhause smarter, effizienter und komfortabler. Mit unseren innovativen Lösungen für intelligente Heizungssteuerung, IT-Support und WLAN-Optimierung.
+                  <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                    Professionelle Smart Home Technologie für mehr Komfort, Effizienz und Kontrolle. Von der Planung bis zur Installation.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <a href="#leistungen" className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
-                      Jetzt starten
-                      <ChevronRight className="ml-2 h-5 w-5" />
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#leistungen" className="group bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all flex items-center justify-center font-semibold">
+                      Unsere Leistungen
+                      <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                     </a>
-                    <a href="#kontakt" className="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-lg hover:border-blue-600 hover:text-blue-600 transition-colors text-center">
-                      Mehr erfahren
+                    <a href="#kontakt" className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all text-center font-semibold">
+                      Kontakt aufnehmen
                     </a>
                   </div>
                 </div>
-                <div className="relative">
-                  <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl p-12 transform hover:scale-105 transition-transform duration-300">
-                    <div className="bg-white rounded-xl p-8 shadow-lg">
-                      <Home className="h-32 w-32 text-blue-600 mx-auto" />
+                <div className="relative lg:block hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-orange-400 rounded-3xl blur-3xl opacity-20 animate-pulse"></div>
+                  <div className="relative bg-white rounded-3xl p-8 shadow-2xl">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl">
+                        <Thermometer className="h-12 w-12 text-orange-600 mb-3" />
+                        <p className="text-sm font-semibold text-gray-900">Smarte Thermostate</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl">
+                        <Wifi className="h-12 w-12 text-blue-600 mb-3" />
+                        <p className="text-sm font-semibold text-gray-900">WLAN Optimierung</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl">
+                        <Headphones className="h-12 w-12 text-green-600 mb-3" />
+                        <p className="text-sm font-semibold text-gray-900">IT-Support</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl flex items-center justify-center">
+                        <Home className="h-16 w-16 text-gray-600" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -80,159 +134,186 @@ function App() {
             </div>
           </section>
 
-          <section id="leistungen" className="py-20 bg-white">
+          <section id="leistungen" className="py-16 sm:py-24 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Unsere Leistungen</h2>
-                <p className="text-xl text-gray-600">Professionelle Smart Home Lösungen aus einer Hand</p>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Unsere Leistungen</h2>
+                <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Professionelle Smart Home Lösungen für jeden Bedarf</p>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl border border-orange-100 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => navigateToPage('thermostats')}>
-                  <div className="bg-orange-100 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
-                    <Thermometer className="h-8 w-8 text-orange-600" />
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <div
+                  className="group bg-gradient-to-br from-orange-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-orange-100 hover:border-orange-300 hover:shadow-2xl transition-all cursor-pointer transform hover:-translate-y-2"
+                  onClick={() => navigateToPage('thermostats')}
+                >
+                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Thermometer className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Smarte Thermostate</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Smarte Thermostate</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">
-                    Optimieren Sie Ihre Heizkosten und steigern Sie Ihren Komfort mit intelligenten Thermostaten. Steuerbar von überall, energieeffizient und einfach zu bedienen.
+                    Optimieren Sie Ihre Heizkosten mit intelligenten Thermostaten. Steuerbar von überall, energieeffizient und komfortabel.
                   </p>
-                  <ul className="space-y-2 text-gray-600 mb-6">
+                  <ul className="space-y-3 text-gray-600 mb-6">
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Bis zu 30% Energieeinsparung
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Bis zu 30% Energieeinsparung</span>
                     </li>
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
-                      App-Steuerung & Automatisierung
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>App-Steuerung & Automatisierung</span>
                     </li>
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Professionelle Installation
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Professionelle Installation</span>
                     </li>
                   </ul>
-                  <button className="text-orange-600 font-semibold flex items-center hover:text-orange-700">
+                  <button className="text-orange-600 font-semibold flex items-center group-hover:text-orange-700">
                     Mehr erfahren
-                    <ChevronRight className="ml-1 h-5 w-5" />
+                    <ChevronRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => navigateToPage('wlan')}>
-                  <div className="bg-blue-100 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
-                    <Wifi className="h-8 w-8 text-blue-600" />
+                <div
+                  className="group bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-100 hover:border-blue-300 hover:shadow-2xl transition-all cursor-pointer transform hover:-translate-y-2"
+                  onClick={() => navigateToPage('wlan')}
+                >
+                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Wifi className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">WLAN-Optimierung</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">WLAN-Optimierung</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">
-                    Schnelles und stabiles WLAN in jedem Raum. Wir analysieren Ihr Netzwerk und sorgen für optimale Abdeckung und Geschwindigkeit in Ihrem gesamten Zuhause.
+                    Stabiles und schnelles WLAN in jedem Raum. Professionelle Analyse und Optimierung Ihres Netzwerks.
                   </p>
-                  <ul className="space-y-2 text-gray-600 mb-6">
+                  <ul className="space-y-3 text-gray-600 mb-6">
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Vollständige Netzwerkanalyse
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Vollständige Netzwerkanalyse</span>
                     </li>
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Mesh-WLAN Systeme
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Mesh-WLAN Systeme</span>
                     </li>
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Sicherheitsoptimierung
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Sicherheitsoptimierung</span>
                     </li>
                   </ul>
-                  <button className="text-blue-600 font-semibold flex items-center hover:text-blue-700">
+                  <button className="text-blue-600 font-semibold flex items-center group-hover:text-blue-700">
                     Mehr erfahren
-                    <ChevronRight className="ml-1 h-5 w-5" />
+                    <ChevronRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
 
-                <div className="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl border border-green-100 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => navigateToPage('support')}>
-                  <div className="bg-green-100 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
-                    <Headphones className="h-8 w-8 text-green-600" />
+                <div
+                  className="group bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-green-100 hover:border-green-300 hover:shadow-2xl transition-all cursor-pointer transform hover:-translate-y-2"
+                  onClick={() => navigateToPage('support')}
+                >
+                  <div className="bg-gradient-to-br from-green-500 to-green-600 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Headphones className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">IT-Support</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">IT-Support</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">
-                    Kompetenter IT-Support für Ihr Smart Home. Wir helfen bei der Einrichtung, Wartung und bei allen technischen Fragen rund um Ihre intelligenten Geräte.
+                    Professioneller Support für Ihr Smart Home. Wir helfen bei allen technischen Fragen.
                   </p>
-                  <ul className="space-y-2 text-gray-600 mb-6">
+                  <ul className="space-y-3 text-gray-600 mb-6">
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                      24/7 Support-Hotline
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Kompetente Beratung</span>
                     </li>
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Remote & Vor-Ort Service
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Remote & Vor-Ort Service</span>
                     </li>
                     <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Regelmäßige Wartung
+                      <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span>Regelmäßige Wartung</span>
                     </li>
                   </ul>
-                  <button className="text-green-600 font-semibold flex items-center hover:text-green-700">
+                  <button className="text-green-600 font-semibold flex items-center group-hover:text-green-700">
                     Mehr erfahren
-                    <ChevronRight className="ml-1 h-5 w-5" />
+                    <ChevronRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
             </div>
           </section>
 
-          <section id="vorteile" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+          <section id="vorteile" className="py-16 sm:py-24 bg-gradient-to-br from-gray-50 to-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Warum HomeConnect?</h2>
-                <p className="text-xl text-gray-600">Ihr Partner für intelligente Haustechnik in Deutschland</p>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Warum HomeConnectSolutions?</h2>
+                <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Ihre Vorteile mit uns als Partner</p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Thermometer className="h-10 w-10" />
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                <div className="text-center bg-white p-6 sm:p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Thermometer className="h-8 w-8 sm:h-10 sm:w-10" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Effizient</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Effizient</h3>
                   <p className="text-gray-600">Optimale Lösungen für Ihr Zuhause</p>
                 </div>
 
-                <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Wifi className="h-10 w-10" />
+                <div className="text-center bg-white p-6 sm:p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Wifi className="h-8 w-8 sm:h-10 sm:w-10" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Zuverlässig</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Zuverlässig</h3>
                   <p className="text-gray-600">Stabile und sichere Technologie</p>
                 </div>
 
-                <div className="text-center">
-                  <div className="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="text-center bg-white p-6 sm:p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="bg-gradient-to-br from-green-600 to-green-700 text-white w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <svg className="h-8 w-8 sm:h-10 sm:w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Umweltfreundlich</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Umweltfreundlich</h3>
                   <p className="text-gray-600">Nachhaltige Energieeinsparung</p>
                 </div>
 
-                <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Headphones className="h-10 w-10" />
+                <div className="text-center bg-white p-6 sm:p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Headphones className="h-8 w-8 sm:h-10 sm:w-10" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Kompetent</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Kompetent</h3>
                   <p className="text-gray-600">Professionelle Beratung & Support</p>
                 </div>
               </div>
             </div>
           </section>
 
-          <section id="kontakt" className="py-20 bg-white">
+          <section id="kontakt" className="py-16 sm:py-24 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid md:grid-cols-2 gap-12">
-                <div>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-6">Kontaktieren Sie uns</h2>
-                  <p className="text-xl text-gray-600 mb-8">
-                    Haben Sie Fragen oder möchten Sie ein unverbindliches Angebot erhalten? Wir freuen uns auf Ihre Nachricht!
-                  </p>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Kontaktieren Sie uns</h2>
+                <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">Wir freuen uns auf Ihre Nachricht</p>
+              </div>
 
+              <div className="grid lg:grid-cols-2 gap-12">
+                <div>
                   <div className="space-y-6">
-                    <div className="flex items-start">
-                      <div className="bg-blue-100 p-3 rounded-lg">
-                        <Phone className="h-6 w-6 text-blue-600" />
+                    <div className="flex items-start bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border border-blue-100">
+                      <div className="bg-blue-600 p-3 rounded-xl">
+                        <Phone className="h-6 w-6 text-white" />
                       </div>
                       <div className="ml-4">
                         <h3 className="font-bold text-gray-900 mb-1">Telefon</h3>
@@ -240,9 +321,9 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="flex items-start">
-                      <div className="bg-blue-100 p-3 rounded-lg">
-                        <Mail className="h-6 w-6 text-blue-600" />
+                    <div className="flex items-start bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border border-blue-100">
+                      <div className="bg-blue-600 p-3 rounded-xl">
+                        <Mail className="h-6 w-6 text-white" />
                       </div>
                       <div className="ml-4">
                         <h3 className="font-bold text-gray-900 mb-1">E-Mail</h3>
@@ -250,9 +331,9 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="flex items-start">
-                      <div className="bg-blue-100 p-3 rounded-lg">
-                        <MapPin className="h-6 w-6 text-blue-600" />
+                    <div className="flex items-start bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border border-blue-100">
+                      <div className="bg-blue-600 p-3 rounded-xl">
+                        <MapPin className="h-6 w-6 text-white" />
                       </div>
                       <div className="ml-4">
                         <h3 className="font-bold text-gray-900 mb-1">Adresse</h3>
@@ -266,36 +347,36 @@ function App() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100">
+                <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-100">
                   <form className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
                       <input
                         type="text"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                         placeholder="Ihr Name"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">E-Mail</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">E-Mail</label>
                       <input
                         type="email"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                         placeholder="ihre.email@beispiel.de"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Nachricht</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Nachricht</label>
                       <textarea
                         rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                         placeholder="Wie können wir Ihnen helfen?"
                       />
                     </div>
 
-                    <button type="submit" className="w-full bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold">
                       Nachricht senden
                     </button>
                   </form>
@@ -304,13 +385,15 @@ function App() {
             </div>
           </section>
 
-          <footer className="bg-gray-900 text-white py-12">
+          <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid md:grid-cols-4 gap-8 mb-8">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <div>
                   <div className="flex items-center space-x-2 mb-4">
-                    <Home className="h-6 w-6 text-blue-400" />
-                    <span className="text-xl font-bold">HomeConnect</span>
+                    <div className="bg-blue-600 p-2 rounded-lg">
+                      <Home className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="text-lg font-bold">HomeConnectSolutions</span>
                   </div>
                   <p className="text-gray-400">
                     Ihr Partner für intelligente Smart Home Lösungen in Deutschland.
@@ -345,8 +428,8 @@ function App() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 HomeConnect. Alle Rechte vorbehalten.</p>
+              <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 HomeConnectSolutions. Alle Rechte vorbehalten.</p>
               </div>
             </div>
           </footer>
@@ -354,43 +437,43 @@ function App() {
       )}
 
       {currentPage === 'thermostats' && (
-        <div className="min-h-screen bg-white pb-16">
-          <section className="bg-gradient-to-br from-orange-50 to-white py-16">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pb-16">
+          <section className="bg-gradient-to-br from-orange-50 to-white py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <button onClick={() => navigateToPage('home')} className="flex items-center text-orange-600 hover:text-orange-700 mb-8 transition-colors">
+              <button onClick={() => navigateToPage('home')} className="flex items-center text-orange-600 hover:text-orange-700 mb-8 transition-colors font-medium">
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Zurück zur Startseite
               </button>
 
-              <div className="flex items-center mb-6">
-                <div className="bg-orange-100 p-4 rounded-xl mr-4">
-                  <Thermometer className="h-12 w-12 text-orange-600" />
+              <div className="flex flex-col sm:flex-row items-center mb-6">
+                <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-4 rounded-2xl mr-0 sm:mr-6 mb-4 sm:mb-0 shadow-lg">
+                  <Thermometer className="h-12 w-12 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold text-gray-900">Smarte Thermostate</h1>
-                  <p className="text-xl text-gray-600 mt-2">Heizen Sie intelligent und sparen Sie Energie</p>
+                <div className="text-center sm:text-left">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">Smarte Thermostate</h1>
+                  <p className="text-lg sm:text-xl text-gray-600 mt-2">Heizen Sie intelligent und sparen Sie Energie</p>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="py-16 bg-white">
+          <section className="py-12 sm:py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">Warum smarte Thermostate?</h2>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Warum smarte Thermostate?</h2>
+                <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
                   Mit intelligenten Thermostaten optimieren Sie Ihre Heizkosten und erhöhen gleichzeitig Ihren Wohnkomfort. Unsere Lösungen passen sich automatisch an Ihren Tagesablauf an und sorgen für die perfekte Temperatur – genau dann, wenn Sie sie brauchen.
                 </p>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-xl border border-orange-100">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-2 text-lg">Energieeffizienz</h3>
                     <p className="text-gray-600">Reduzieren Sie Ihre Heizkosten um bis zu 30% durch intelligente Steuerung und Automatisierung.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-xl border border-orange-100">
+                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-2 text-lg">Komfort</h3>
                     <p className="text-gray-600">Steuern Sie Ihre Heizung von überall per App und genießen Sie immer die perfekte Raumtemperatur.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-xl border border-orange-100">
+                  <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border-2 border-orange-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-2 text-lg">Umweltschutz</h3>
                     <p className="text-gray-600">Senken Sie Ihren CO₂-Ausstoß durch optimiertes Heizen und leisten Sie einen Beitrag zum Klimaschutz.</p>
                   </div>
@@ -398,13 +481,13 @@ function App() {
               </div>
 
               <div className="mb-16">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Unsere Pakete</h2>
-                <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                  <div className="bg-white border-2 border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">Unsere Pakete</h2>
+                <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+                  <div className="bg-white border-2 border-gray-200 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all">
                     <div className="text-center mb-6">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Basis Paket</h3>
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Basis Paket</h3>
                       <p className="text-gray-600 mb-4">TP-Link Hardware für normale Heizkörper</p>
-                      <div className="text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
                       <p className="text-sm text-gray-500">nach individueller Beratung</p>
                     </div>
 
@@ -443,19 +526,19 @@ function App() {
                       </li>
                     </ul>
 
-                    <button className="w-full bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold">
+                    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
                       Beratung anfragen
                     </button>
                   </div>
 
-                  <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-500 rounded-2xl p-8 hover:shadow-xl transition-shadow relative">
-                    <div className="absolute top-0 right-0 bg-orange-600 text-white px-4 py-1 rounded-bl-lg rounded-tr-lg text-sm font-semibold">
+                  <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-500 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all relative">
+                    <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-sm font-semibold shadow-lg">
                       EMPFOHLEN
                     </div>
-                    <div className="text-center mb-6">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Paket</h3>
+                    <div className="text-center mb-6 mt-4">
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Premium Paket</h3>
                       <p className="text-gray-600 mb-4">tado° Hardware inkl. Fußbodenheizung</p>
-                      <div className="text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-2">Preis auf Anfrage</div>
                       <p className="text-sm text-gray-500">nach individueller Beratung</p>
                     </div>
 
@@ -502,19 +585,19 @@ function App() {
                       </li>
                     </ul>
 
-                    <button className="w-full bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold">
+                    <button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
                       Beratung anfragen
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl border border-gray-200">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Individuelle Lösungen</h3>
-                <p className="text-gray-600 mb-4">
+              <div className="bg-gradient-to-br from-gray-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-gray-200 shadow-lg">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Individuelle Lösungen</h3>
+                <p className="text-gray-600 mb-6">
                   Benötigen Sie eine maßgeschneiderte Lösung für Ihr Zuhause oder Unternehmen? Wir erstellen Ihnen gerne ein individuelles Angebot, das perfekt auf Ihre Bedürfnisse zugeschnitten ist.
                 </p>
-                <button onClick={() => navigateToPage('home')} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                <button onClick={() => navigateToPage('home')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-semibold">
                   Individuelle Beratung anfragen
                 </button>
               </div>
@@ -524,84 +607,84 @@ function App() {
       )}
 
       {currentPage === 'wlan' && (
-        <div className="min-h-screen bg-white pb-16">
-          <section className="bg-gradient-to-br from-blue-50 to-white py-16">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pb-16">
+          <section className="bg-gradient-to-br from-blue-50 to-white py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <button onClick={() => navigateToPage('home')} className="flex items-center text-blue-600 hover:text-blue-700 mb-8 transition-colors">
+              <button onClick={() => navigateToPage('home')} className="flex items-center text-blue-600 hover:text-blue-700 mb-8 transition-colors font-medium">
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Zurück zur Startseite
               </button>
 
-              <div className="flex items-center mb-6">
-                <div className="bg-blue-100 p-4 rounded-xl mr-4">
-                  <Wifi className="h-12 w-12 text-blue-600" />
+              <div className="flex flex-col sm:flex-row items-center mb-6">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-2xl mr-0 sm:mr-6 mb-4 sm:mb-0 shadow-lg">
+                  <Wifi className="h-12 w-12 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold text-gray-900">WLAN-Optimierung</h1>
-                  <p className="text-xl text-gray-600 mt-2">Perfekte Verbindung in jedem Raum</p>
+                <div className="text-center sm:text-left">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">WLAN-Optimierung</h1>
+                  <p className="text-lg sm:text-xl text-gray-600 mt-2">Perfekte Verbindung in jedem Raum</p>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="py-16 bg-white">
+          <section className="py-12 sm:py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid md:grid-cols-2 gap-12 mb-16">
+              <div className="grid lg:grid-cols-2 gap-12 mb-16">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">Stabiles WLAN im ganzen Haus</h2>
-                  <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Stabiles WLAN im ganzen Haus</h2>
+                  <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
                     Erleben Sie nahtlose Internetverbindung ohne Funklöcher. Unsere professionellen WLAN-Lösungen sorgen für optimale Abdeckung und Geschwindigkeit in Ihrem gesamten Zuhause oder Büro.
                   </p>
-                  <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
                     Wir analysieren Ihre räumlichen Gegebenheiten, identifizieren Störquellen und installieren hochwertige Mesh-Systeme für eine perfekte WLAN-Abdeckung.
                   </p>
                 </div>
-                <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl p-8 flex items-center justify-center">
-                  <Wifi className="h-48 w-48 text-blue-600" />
+                <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl p-8 flex items-center justify-center shadow-xl">
+                  <Wifi className="h-32 w-32 sm:h-48 sm:w-48 text-blue-600" />
                 </div>
               </div>
 
               <div className="mb-16">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Unsere Leistungen</h2>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Unsere Leistungen</h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border-2 border-blue-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Netzwerkanalyse</h3>
                     <p className="text-gray-600">Umfassende Analyse Ihrer bestehenden WLAN-Infrastruktur und Identifikation von Schwachstellen.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border-2 border-blue-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Mesh-WLAN Installation</h3>
                     <p className="text-gray-600">Installation moderner Mesh-Systeme für lückenlose Abdeckung ohne Geschwindigkeitsverlust.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border-2 border-blue-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Geschwindigkeitsoptimierung</h3>
                     <p className="text-gray-600">Optimierung der Kanaleinstellungen und Reduzierung von Interferenzen für maximale Geschwindigkeit.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border-2 border-blue-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Sicherheitskonfiguration</h3>
                     <p className="text-gray-600">Einrichtung von WPA3-Verschlüsselung und Gast-Netzwerken für maximale Sicherheit.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border-2 border-blue-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Access Point Setup</h3>
                     <p className="text-gray-600">Strategische Platzierung von Access Points für optimale Signalverteilung.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border-2 border-blue-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Wartung & Support</h3>
-                    <p className="text-gray-600">Regelmäßige Updates und 24/7 Support bei WLAN-Problemen.</p>
+                    <p className="text-gray-600">Regelmäßige Updates und Support bei WLAN-Problemen.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-200">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Kostenlose WLAN-Analyse</h3>
+              <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-200 shadow-xl">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Kostenlose WLAN-Analyse</h3>
                 <p className="text-gray-600 mb-6">
                   Lassen Sie uns Ihr WLAN kostenlos analysieren! Wir erstellen einen detaillierten Bericht über Ihre aktuelle Netzwerkqualität und zeigen Ihnen Optimierungspotenziale auf.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button onClick={() => navigateToPage('home')} className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+                  <button onClick={() => navigateToPage('home')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl hover:shadow-xl transition-all flex items-center justify-center font-semibold">
                     Analyse anfragen
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </button>
-                  <button onClick={() => navigateToPage('home')} className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors">
+                  <button onClick={() => navigateToPage('home')} className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-xl hover:bg-blue-50 transition-all font-semibold">
                     Weitere Informationen
                   </button>
                 </div>
@@ -612,109 +695,85 @@ function App() {
       )}
 
       {currentPage === 'support' && (
-        <div className="min-h-screen bg-white pb-16">
-          <section className="bg-gradient-to-br from-green-50 to-white py-16">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pb-16">
+          <section className="bg-gradient-to-br from-green-50 to-white py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <button onClick={() => navigateToPage('home')} className="flex items-center text-green-600 hover:text-green-700 mb-8 transition-colors">
+              <button onClick={() => navigateToPage('home')} className="flex items-center text-green-600 hover:text-green-700 mb-8 transition-colors font-medium">
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Zurück zur Startseite
               </button>
 
-              <div className="flex items-center mb-6">
-                <div className="bg-green-100 p-4 rounded-xl mr-4">
-                  <Headphones className="h-12 w-12 text-green-600" />
+              <div className="flex flex-col sm:flex-row items-center mb-6">
+                <div className="bg-gradient-to-br from-green-500 to-green-600 p-4 rounded-2xl mr-0 sm:mr-6 mb-4 sm:mb-0 shadow-lg">
+                  <Headphones className="h-12 w-12 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-5xl font-bold text-gray-900">IT-Support</h1>
-                  <p className="text-xl text-gray-600 mt-2">Professionelle Hilfe für Ihr Smart Home</p>
+                <div className="text-center sm:text-left">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">IT-Support</h1>
+                  <p className="text-lg sm:text-xl text-gray-600 mt-2">Professionelle Hilfe für Ihr Smart Home</p>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="py-16 bg-white">
+          <section className="py-12 sm:py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid md:grid-cols-2 gap-12 mb-16">
+              <div className="grid lg:grid-cols-2 gap-12 mb-16">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">Ihr verlässlicher IT-Partner</h2>
-                  <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Ihr verlässlicher IT-Partner</h2>
+                  <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
                     Unser erfahrenes Support-Team steht Ihnen bei allen technischen Fragen zur Seite. Ob Einrichtung, Fehlerbehebung oder Optimierung – wir sorgen dafür, dass Ihre Smart Home Technologie reibungslos funktioniert.
                   </p>
-                  <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                    Mit unserem 24/7 Support sind wir jederzeit für Sie erreichbar und lösen Probleme schnell und professionell.
+                  <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed">
+                    Wir sind jederzeit für Sie erreichbar und lösen Probleme schnell und professionell.
                   </p>
                 </div>
-                <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-8 flex items-center justify-center">
-                  <Headphones className="h-48 w-48 text-green-600" />
+                <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-3xl p-8 flex items-center justify-center shadow-xl">
+                  <Headphones className="h-32 w-32 sm:h-48 sm:w-48 text-green-600" />
                 </div>
               </div>
 
               <div className="mb-16">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Unsere Support-Leistungen</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
-                    <h3 className="font-bold text-gray-900 mb-3 text-lg">24/7 Hotline</h3>
-                    <p className="text-gray-600 mb-4">Rund um die Uhr erreichbar für dringende Anliegen und technische Notfälle.</p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Unsere Support-Leistungen</h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border-2 border-green-100 shadow-lg">
+                    <h3 className="font-bold text-gray-900 mb-3 text-lg">Kompetente Beratung</h3>
+                    <p className="text-gray-600 mb-4">Professionelle Unterstützung bei allen Fragen rund um Ihr Smart Home.</p>
                     <p className="text-green-600 font-semibold">Telefon: +49 (0) 30 1234 5678</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
+                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border-2 border-green-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Remote-Support</h3>
                     <p className="text-gray-600">Fernwartung für schnelle Problembehebung ohne Vor-Ort-Termin.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
+                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border-2 border-green-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Vor-Ort Service</h3>
                     <p className="text-gray-600">Persönlicher Service bei Ihnen zu Hause für komplexe Installationen und Reparaturen.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
+                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border-2 border-green-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Schulungen</h3>
                     <p className="text-gray-600">Einführungen und Schulungen für die optimale Nutzung Ihrer Smart Home Geräte.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
+                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border-2 border-green-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Wartungsverträge</h3>
                     <p className="text-gray-600">Regelmäßige Wartung und Updates für langfristige Systemstabilität.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
+                  <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border-2 border-green-100 shadow-lg">
                     <h3 className="font-bold text-gray-900 mb-3 text-lg">Systemdiagnose</h3>
                     <p className="text-gray-600">Umfassende Analyse und Optimierung Ihrer Smart Home Infrastruktur.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-8 mb-16">
-                <div className="text-center p-6">
-                  <div className="bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                    &lt;15
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Min. Reaktionszeit</h3>
-                  <p className="text-gray-600">Schnelle Rückmeldung auf Ihre Anfragen</p>
-                </div>
-                <div className="text-center p-6">
-                  <div className="bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                    98%
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Kundenzufriedenheit</h3>
-                  <p className="text-gray-600">Exzellente Bewertungen unserer Kunden</p>
-                </div>
-                <div className="text-center p-6">
-                  <div className="bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                    24/7
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2">Verfügbarkeit</h3>
-                  <p className="text-gray-600">Immer für Sie da, wenn Sie uns brauchen</p>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl border border-green-200">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Support anfragen</h3>
+              <div className="bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-green-200 shadow-xl">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Support anfragen</h3>
                 <p className="text-gray-600 mb-6">
                   Haben Sie Fragen oder benötigen Sie Unterstützung? Kontaktieren Sie uns jederzeit per Telefon, E-Mail oder über unser Kontaktformular.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button onClick={() => navigateToPage('home')} className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+                  <button onClick={() => navigateToPage('home')} className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-xl hover:shadow-xl transition-all flex items-center justify-center font-semibold">
                     Jetzt Kontakt aufnehmen
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </button>
-                  <a href="tel:+4903012345678" className="border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg hover:bg-green-50 transition-colors text-center">
+                  <a href="tel:+4903012345678" className="border-2 border-green-600 text-green-600 px-8 py-3 rounded-xl hover:bg-green-50 transition-all text-center font-semibold">
                     +49 (0) 30 1234 5678
                   </a>
                 </div>
@@ -725,16 +784,16 @@ function App() {
       )}
 
       {currentPage === 'impressum' && (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <button onClick={() => navigateToPage('home')} className="flex items-center text-blue-600 hover:text-blue-700 mb-8">
+            <button onClick={() => navigateToPage('home')} className="flex items-center text-blue-600 hover:text-blue-700 mb-8 font-medium">
               <ArrowLeft className="h-5 w-5 mr-2" />
               Zurück zur Startseite
             </button>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">Impressum</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">Impressum</h1>
 
-            <div className="prose max-w-none">
+            <div className="prose max-w-none bg-white p-6 sm:p-8 rounded-3xl shadow-lg">
               <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Angaben gemäß § 5 TMG</h2>
 
               <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Verantwortliche Person</h3>
@@ -782,16 +841,16 @@ function App() {
       )}
 
       {currentPage === 'datenschutz' && (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <button onClick={() => navigateToPage('home')} className="flex items-center text-blue-600 hover:text-blue-700 mb-8">
+            <button onClick={() => navigateToPage('home')} className="flex items-center text-blue-600 hover:text-blue-700 mb-8 font-medium">
               <ArrowLeft className="h-5 w-5 mr-2" />
               Zurück zur Startseite
             </button>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">Datenschutzerklärung</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">Datenschutzerklärung</h1>
 
-            <div className="prose max-w-none">
+            <div className="prose max-w-none bg-white p-6 sm:p-8 rounded-3xl shadow-lg">
               <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Datenschutz auf einen Blick</h2>
 
               <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Allgemeine Hinweise</h3>
