@@ -161,7 +161,7 @@ function App() {
           <section id="vorteile" className="py-20 bg-gradient-to-br from-gray-50 to-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Warum HomeConnect?</h2>
+                <h2 className="text-4xl font-bold text-gray-900 mb-4">Warum HomeConnectSolutions?</h2>
                 <p className="text-xl text-gray-600">Ihr Partner für intelligente Haustechnik in Deutschland</p>
               </div>
 
@@ -335,7 +335,7 @@ function App() {
 
               {/* Footer Bottom */}
               <div className="border-t border-gray-800 pt-6 text-center text-gray-500 text-sm">
-                &copy; 2025 HomeConnect. Alle Rechte vorbehalten.
+                &copy; 2025 HomeConnectSolutions. Alle Rechte vorbehalten.
               </div>
             </div>
           </footer>
