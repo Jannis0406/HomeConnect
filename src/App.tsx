@@ -1,5 +1,3 @@
-
-tsx
 import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, MapPin, X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -10,7 +8,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* NAVBAR */}
+      {/* NAVIGATION */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -143,15 +141,15 @@ function App() {
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-start">
                       <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Schnelle Hilfe bei Problemen
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
                       Remote & Vor-Ort Service
                     </li>
                     <li className="flex items-start">
                       <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                      Regelmäßige Systempflege
+                      Regelmäßige Wartung
+                    </li>
+                    <li className="flex items-start">
+                      <ChevronRight className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
+                      Maßgeschneiderte Lösungen
                     </li>
                   </ul>
                 </div>
@@ -159,7 +157,7 @@ function App() {
             </div>
           </section>
 
-          {/* Vorteile Section */}
+          {/* Vorteile */}
           <section id="vorteile" className="py-20 bg-gradient-to-br from-gray-50 to-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-16">
@@ -172,24 +170,24 @@ function App() {
                   <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
                     ✅
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Zuverlässig</h3>
-                  <p className="text-gray-600">Wir stehen für Qualität und Stabilität</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Zuverlässigkeit</h3>
+                  <p className="text-gray-600">Wir halten, was wir versprechen</p>
                 </div>
 
                 <div className="text-center">
                   <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
                     🌱
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Nachhaltig</h3>
-                  <p className="text-gray-600">Energieeffiziente Lösungen für Ihr Zuhause</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Nachhaltigkeit</h3>
+                  <p className="text-gray-600">Energieeffiziente Lösungen</p>
                 </div>
 
                 <div className="text-center">
                   <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
                     ⚡
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Innovativ</h3>
-                  <p className="text-gray-600">Moderne Technik und smarte Automatisierung</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Innovation</h3>
+                  <p className="text-gray-600">Moderne Technologien</p>
                 </div>
 
                 <div className="text-center">
@@ -197,13 +195,13 @@ function App() {
                     💡
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Kundenorientiert</h3>
-                  <p className="text-gray-600">Individuelle Lösungen für jedes Zuhause</p>
+                  <p className="text-gray-600">Wir denken an Ihre Bedürfnisse</p>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Kontakt Section */}
+          {/* Kontakt */}
           <section id="kontakt" className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid md:grid-cols-2 gap-12">
@@ -297,17 +295,15 @@ function App() {
                     <Home className="h-6 w-6 text-blue-400" />
                     <span className="text-xl font-bold">HomeConnect</span>
                   </div>
-                  <p className="text-gray-400">
-                    Ihr Partner für intelligente Smart Home Lösungen in Deutschland.
-                  </p>
+                  <p className="text-gray-400">Ihr Partner für intelligente Smart Home Lösungen in Deutschland.</p>
                 </div>
 
                 <div>
                   <h3 className="font-bold mb-4">Leistungen</h3>
                   <ul className="space-y-2 text-gray-400">
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">Smarte Thermostate</a></li>
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">WLAN-Optimierung</a></li>
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">IT-Support</a></li>
+                    <li><a href="#leistungen" className="hover:text-blue-400 transition-colors">Smarte Thermostate</a></li>
+                    <li><a href="#leistungen" className="hover:text-blue-400 transition-colors">WLAN-Optimierung</a></li>
+                    <li><a href="#leistungen" className="hover:text-blue-400 transition-colors">IT-Support</a></li>
                   </ul>
                 </div>
 
@@ -323,83 +319,61 @@ function App() {
                 <div>
                   <h3 className="font-bold mb-4">Rechtliches</h3>
                   <ul className="space-y-2 text-gray-400">
-                    <li><button onClick={() => setCurrentPage('impressum')} className="hover:text-blue-400 transition-colors">Impressum</button></li>
-                    <li><button onClick={() => setCurrentPage('datenschutz')} className="hover:text-blue-400 transition-colors">Datenschutz</button></
-```
+                    <li>
+                      <button onClick={() => setCurrentPage('impressum')} className="hover:text-blue-400 transition-colors">
+                        Impressum
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => setCurrentPage('datenschutz')} className="hover:text-blue-400 transition-colors">
+                        Datenschutz
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
 
-
-li> </ul> </div> </div>
-
-```
-          {/* Neue Footer Stats */}
-          <div className="grid md:grid-cols-4 gap-8 text-center border-t border-gray-700 pt-8">
-            <div>
-              <span className="block text-3xl font-bold">✅</span>
-              <p>Zuverlässigkeit</p>
+              {/* Footer Bottom */}
+              <div className="border-t border-gray-800 pt-6 text-center text-gray-500 text-sm">
+                &copy; 2025 HomeConnect. Alle Rechte vorbehalten.
+              </div>
             </div>
-            <div>
-              <span className="block text-3xl font-bold">🌱</span>
-              <p>Nachhaltigkeit</p>
-            </div>
-            <div>
-              <span className="block text-3xl font-bold">⚡</span>
-              <p>Innovation</p>
-            </div>
-            <div>
-              <span className="block text-3xl font-bold">💡</span>
-              <p>Kundenorientiert</p>
-            </div>
-          </div>
+          </footer>
+        </>
+      )}
 
-          <p className="text-center text-gray-500 mt-8">&copy; 2025 HomeConnect. Alle Rechte vorbehalten.</p>
-        </div>
-      </footer>
-    </>
-  )}
+      {/* IMPRESSUM */}
+      {currentPage === 'impressum' && (
+        <section className="min-h-screen p-12 bg-white">
+          <h1 className="text-4xl font-bold mb-6">Impressum</h1>
+          <p className="text-gray-700 mb-4">
+            HomeConnect GmbH<br />
+            Musterstraße 123<br />
+            10115 Berlin<br />
+            Deutschland
+          </p>
+          <p className="text-gray-700 mb-4">Telefon: +49 (0) 30 1234 5678</p>
+          <p className="text-gray-700 mb-4">E-Mail: info@homeconnect.de</p>
+          <button onClick={() => setCurrentPage('home')} className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Zurück zur Startseite
+          </button>
+        </section>
+      )}
 
-  {/* IMPRESSUM PAGE */}
-  {currentPage === 'impressum' && (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <h1 className="text-4xl font-bold mb-6">Impressum</h1>
-      <p className="text-gray-700 mb-4">
-        HomeConnect GmbH<br />
-        Musterstraße 123<br />
-        10115 Berlin<br />
-        Deutschland
-      </p>
-      <p className="text-gray-700 mb-4">
-        Geschäftsführer: Max Mustermann<br />
-        Handelsregister: HRB 12345, Amtsgericht Berlin
-      </p>
-      <p className="text-gray-700 mb-4">
-        Kontakt: info@homeconnect.de | +49 (0) 30 1234 5678
-      </p>
-      <button onClick={() => setCurrentPage('home')} className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-        Zurück zur Startseite
-      </button>
+      {/* DATENSCHUTZ */}
+      {currentPage === 'datenschutz' && (
+        <section className="min-h-screen p-12 bg-white">
+          <h1 className="text-4xl font-bold mb-6">Datenschutz</h1>
+          <p className="text-gray-700 mb-4">
+            Ihre Daten sind bei uns sicher. Wir verwenden sie nur zur Bearbeitung Ihrer Anfragen und für den Betrieb unserer Smart Home Lösungen.
+          </p>
+          <button onClick={() => setCurrentPage('home')} className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Zurück zur Startseite
+          </button>
+        </section>
+      )}
     </div>
-  )}
-
-  {/* DATENSCHUTZ PAGE */}
-  {currentPage === 'datenschutz' && (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <h1 className="text-4xl font-bold mb-6">Datenschutz</h1>
-      <p className="text-gray-700 mb-4">
-        Wir legen großen Wert auf den Schutz Ihrer Daten. Alle erhobenen Informationen werden vertraulich behandelt und nicht an Dritte weitergegeben.
-      </p>
-      <p className="text-gray-700 mb-4">
-        Weitere Details entnehmen Sie bitte unserer vollständigen Datenschutzerklärung.
-      </p>
-      <button onClick={() => setCurrentPage('home')} className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-        Zurück zur Startseite
-      </button>
-    </div>
-  )}
-</div>
-```
-
-);
+  );
 }
 
 export default App;
-
