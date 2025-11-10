@@ -239,8 +239,8 @@ function App() {
                       <div className="ml-4">
                         <h3 className="font-bold text-gray-900 mb-1">Adresse</h3>
                         <p className="text-gray-600">
-                          Musterstraße 123<br />
-                          10115 Berlin<br />
+                          Am Breiten Stein 1<br />
+                          36284 Hohenroda<br />
                           Deutschland
                         </p>
                       </div>
