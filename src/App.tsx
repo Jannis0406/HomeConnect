@@ -410,11 +410,16 @@ function App() {
                 </div>
 
                 <div>
-                  <h3 className="font-bold mb-4">Unternehmen</h3>
+                  <h3 className="font-bold mb-4">Kontakt</h3>
                   <ul className="space-y-2 text-gray-400">
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">Über uns</a></li>
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">Karriere</a></li>
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">Partner</a></li>
+                    <li className="flex items-center">
+                      <Phone className="h-4 w-4 mr-2" />
+                      <span>Auf Anfrage</span>
+                    </li>
+                    <li className="flex items-center">
+                      <Mail className="h-4 w-4 mr-2" />
+                      <span>Auf Anfrage</span>
+                    </li>
                   </ul>
                 </div>
 
@@ -423,7 +428,6 @@ function App() {
                   <ul className="space-y-2 text-gray-400">
                     <li><button onClick={() => navigateToPage('impressum')} className="hover:text-blue-400 transition-colors">Impressum</button></li>
                     <li><button onClick={() => navigateToPage('datenschutz')} className="hover:text-blue-400 transition-colors">Datenschutz</button></li>
-                    <li><a href="#" className="hover:text-blue-400 transition-colors">AGB</a></li>
                   </ul>
                 </div>
               </div>
@@ -454,10 +458,22 @@ function App() {
                   <p className="text-lg sm:text-xl text-gray-600 mt-2">Heizen Sie intelligent und sparen Sie Energie</p>
                 </div>
               </div>
+
+              <div className="flex justify-center gap-3 mt-8 flex-wrap">
+                <a href="#warum" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
+                  Vorteile
+                </a>
+                <a href="#pakete" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
+                  Pakete
+                </a>
+                <button onClick={() => navigateToPage('hardware')} className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-xl hover:shadow-lg transition-all font-medium">
+                  Hardware-Vergleich
+                </button>
+              </div>
             </div>
           </section>
 
-          <section className="py-12 sm:py-16 bg-white">
+          <section id="warum" className="py-12 sm:py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="mb-16">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Warum smarte Thermostate?</h2>
@@ -480,7 +496,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="mb-16">
+              <div id="pakete" className="mb-16">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">Unsere Pakete</h2>
                 <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
                   <div className="bg-white border-2 border-gray-200 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all">
@@ -918,10 +934,22 @@ function App() {
                   Detaillierte Übersicht unserer Hardware-Komponenten im direkten Vergleich
                 </p>
               </div>
+
+              <div className="flex justify-center gap-3 mt-8 flex-wrap">
+                <a href="#pakete-detail" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
+                  Pakete im Detail
+                </a>
+                <a href="#vergleichstabelle" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
+                  Vergleichstabelle
+                </a>
+                <a href="#empfehlung" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-gray-700 hover:bg-white hover:shadow-md transition-all font-medium border border-gray-200">
+                  Empfehlungen
+                </a>
+              </div>
             </div>
           </section>
 
-          <section className="py-12 sm:py-16 bg-white">
+          <section id="pakete-detail" className="py-12 sm:py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid lg:grid-cols-2 gap-8 mb-16">
                 <div className="bg-white border-2 border-gray-200 rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all">
@@ -1122,7 +1150,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 sm:p-10 rounded-3xl shadow-2xl">
+              <div id="vergleichstabelle" className="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 sm:p-10 rounded-3xl shadow-2xl">
                 <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Direkt-Vergleich</h2>
 
                 <div className="overflow-x-auto">
@@ -1172,7 +1200,7 @@ function App() {
                       </tr>
                       <tr className="border-b border-gray-700">
                         <td className="py-4 px-4 font-medium">Geofencing</td>
-                        <td className="py-4 px-4 text-center"><X className="h-5 w-5 text-red-400 mx-auto" /></td>
+                        <td className="py-4 px-4 text-center"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
                         <td className="py-4 px-4 text-center bg-orange-900/10"><Check className="h-5 w-5 text-green-400 mx-auto" /></td>
                       </tr>
                       <tr className="border-b border-gray-700">
@@ -1190,7 +1218,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="mt-12 bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-200 shadow-xl">
+              <div id="empfehlung" className="mt-12 bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-3xl border-2 border-blue-200 shadow-xl">
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 text-center">Welches Paket ist das richtige für Sie?</h3>
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <div className="bg-white p-6 rounded-2xl border-2 border-gray-200">
