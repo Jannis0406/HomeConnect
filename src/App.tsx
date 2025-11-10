@@ -14,7 +14,7 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Home className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">HomeConnect</span>
+              <span className="text-2xl font-bold text-gray-900">HomeConnectSolutions</span>
             </div>
             <div className="hidden md:flex space-x-8">
               {currentPage === 'home' ? (
@@ -228,7 +228,7 @@ function App() {
                       </div>
                       <div className="ml-4">
                         <h3 className="font-bold text-gray-900 mb-1">E-Mail</h3>
-                        <p className="text-gray-600">info@homeconnect.de</p>
+                        <p className="text-gray-600">info@homeconnectsolutions.de</p>
                       </div>
                     </div>
 
@@ -293,7 +293,7 @@ function App() {
                 <div>
                   <div className="flex items-center space-x-2 mb-4">
                     <Home className="h-6 w-6 text-blue-400" />
-                    <span className="text-xl font-bold">HomeConnect</span>
+                    <span className="text-xl font-bold">HomeConnectSolutions</span>
                   </div>
                   <p className="text-gray-400">Ihr Partner für intelligente Smart Home Lösungen in Deutschland.</p>
                 </div>
@@ -347,13 +347,13 @@ function App() {
         <section className="min-h-screen p-12 bg-white">
           <h1 className="text-4xl font-bold mb-6">Impressum</h1>
           <p className="text-gray-700 mb-4">
-            HomeConnect GbR<br />
+            HomeConnectSolutions GbR<br />
             Am breiten Stein 1<br />
             36284 Hohenroda<br />
             Deutschland
           </p>
           <p className="text-gray-700 mb-4">Telefon: +49 (0) 30 1234 5678</p>
-          <p className="text-gray-700 mb-4">E-Mail: info@homeconnect.de</p>
+          <p className="text-gray-700 mb-4">E-Mail: info@homeconnectSolutions.de</p>
           <button onClick={() => setCurrentPage('home')} className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
             Zurück zur Startseite
           </button>
