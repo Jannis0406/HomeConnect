@@ -938,16 +938,6 @@ function App() {
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">Thermostat: KE100</h3>
                       </div>
-                      <div className="bg-gray-50 p-4 rounded-xl mb-4">
-                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-4">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3">
-                              <Thermometer className="h-16 w-16 text-gray-600" />
-                            </div>
-                            <p className="text-sm text-gray-500">TP-Link KE100</p>
-                          </div>
-                        </div>
-                      </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
                           <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -975,16 +965,6 @@ function App() {
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">Hub: H100</h3>
                       </div>
-                      <div className="bg-gray-50 p-4 rounded-xl mb-4">
-                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-4">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3">
-                              <Home className="h-16 w-16 text-gray-600" />
-                            </div>
-                            <p className="text-sm text-gray-500">TP-Link H100</p>
-                          </div>
-                        </div>
-                      </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
                           <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -1010,18 +990,6 @@ function App() {
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">Fenstersensor: T110</h3>
                         <span className="ml-2 text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-semibold">Optional</span>
-                      </div>
-                      <div className="bg-gray-50 p-4 rounded-xl mb-4">
-                        <div className="aspect-square bg-white rounded-lg flex items-center justify-center p-4">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3">
-                              <svg className="h-16 w-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                              </svg>
-                            </div>
-                            <p className="text-sm text-gray-500">Tapo T110</p>
-                          </div>
-                        </div>
                       </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
@@ -1059,16 +1027,6 @@ function App() {
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">Thermostat: Thermostat X</h3>
                       </div>
-                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
-                        <div className="aspect-square bg-gradient-to-br from-orange-50 to-white rounded-lg flex items-center justify-center p-4">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3 shadow-lg">
-                              <Thermometer className="h-16 w-16 text-orange-600" />
-                            </div>
-                            <p className="text-sm font-semibold text-gray-900">tado° Thermostat X</p>
-                          </div>
-                        </div>
-                      </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
                           <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -1096,16 +1054,6 @@ function App() {
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">Hub: HUB X</h3>
                       </div>
-                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
-                        <div className="aspect-square bg-gradient-to-br from-orange-50 to-white rounded-lg flex items-center justify-center p-4">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-blue-100 to-blue-200 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3 shadow-lg">
-                              <Home className="h-16 w-16 text-blue-600" />
-                            </div>
-                            <p className="text-sm font-semibold text-gray-900">tado° HUB X</p>
-                          </div>
-                        </div>
-                      </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
                           <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -1132,16 +1080,6 @@ function App() {
                         <h3 className="text-xl font-bold text-gray-900">Fenster-Erkennung</h3>
                         <span className="ml-2 text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">Integriert</span>
                       </div>
-                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
-                        <div className="bg-gradient-to-br from-orange-50 to-white rounded-lg p-6">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-green-100 to-green-200 w-16 h-16 mx-auto rounded-xl flex items-center justify-center mb-3 shadow-lg">
-                              <Check className="h-8 w-8 text-green-600" />
-                            </div>
-                            <p className="text-sm font-semibold text-gray-900">Bereits im System integriert</p>
-                          </div>
-                        </div>
-                      </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
                           <Check className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -1164,17 +1102,6 @@ function App() {
                           <Thermometer className="h-6 w-6 text-purple-600" />
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">Fußbodenheizung</h3>
-                      </div>
-                      <div className="bg-white p-4 rounded-xl mb-4 border-2 border-orange-200">
-                        <div className="aspect-square bg-gradient-to-br from-orange-50 to-white rounded-lg flex items-center justify-center p-4">
-                          <div className="text-center">
-                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 w-32 h-32 mx-auto rounded-2xl flex items-center justify-center mb-3 shadow-lg">
-                              <Thermometer className="h-16 w-16 text-white" />
-                            </div>
-                            <p className="text-sm font-semibold text-gray-900">tado° Thermostat X</p>
-                            <p className="text-xs text-gray-500">Wandmontage</p>
-                          </div>
-                        </div>
                       </div>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start">
@@ -1240,8 +1167,8 @@ function App() {
                       </tr>
                       <tr className="border-b border-gray-700">
                         <td className="py-4 px-4 font-medium">Sprachsteuerung</td>
-                        <td className="py-4 px-4 text-center text-xs">Alexa, Google</td>
-                        <td className="py-4 px-4 text-center bg-orange-900/10 text-xs">Alexa, Google, Siri</td>
+                        <td className="py-4 px-4 text-center text-xs">Alexa, Google, Siri (Matter)</td>
+                        <td className="py-4 px-4 text-center bg-orange-900/10 text-xs">Alexa, Google, Siri (Matter)</td>
                       </tr>
                       <tr className="border-b border-gray-700">
                         <td className="py-4 px-4 font-medium">Geofencing</td>
