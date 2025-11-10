@@ -184,35 +184,37 @@ function App() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
-                    10+
+                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Thermometer className="h-10 w-10" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Jahre Erfahrung</h3>
-                  <p className="text-gray-600">Expertise in Smart Home Technologie</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Effizient</h3>
+                  <p className="text-gray-600">Optimale Lösungen für Ihr Zuhause</p>
                 </div>
 
                 <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
-                    1000+
+                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Wifi className="h-10 w-10" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Zufriedene Kunden</h3>
-                  <p className="text-gray-600">Erfolgreich umgesetzte Projekte</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Zuverlässig</h3>
+                  <p className="text-gray-600">Stabile und sichere Technologie</p>
                 </div>
 
                 <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
-                    24/7
+                  <div className="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Support</h3>
-                  <p className="text-gray-600">Immer für Sie erreichbar</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Umweltfreundlich</h3>
+                  <p className="text-gray-600">Nachhaltige Energieeinsparung</p>
                 </div>
 
                 <div className="text-center">
-                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">
-                    100%
+                  <div className="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Headphones className="h-10 w-10" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Qualität</h3>
-                  <p className="text-gray-600">Zertifizierte Fachkräfte</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Kompetent</h3>
+                  <p className="text-gray-600">Professionelle Beratung & Support</p>
                 </div>
               </div>
             </div>
