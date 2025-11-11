@@ -553,6 +553,79 @@ function App() {
                   </a>
                 </div>
               </div>
+
+              <div className="mt-20">
+                <div className="text-center mb-12">
+                  <h2 className="text-4xl font-bold text-gray-900 mb-4">Direkt-Vergleich</h2>
+                  <p className="text-xl text-gray-600">Alle Features im Überblick</p>
+                </div>
+
+                <div className="bg-white rounded-3xl shadow-xl border-2 border-emerald-100 overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-2 border-emerald-200 bg-gradient-to-r from-emerald-50 to-blue-50">
+                          <th className="text-left py-5 px-6 font-bold text-gray-900 text-lg">Merkmal</th>
+                          <th className="text-center py-5 px-6 font-bold text-gray-900 text-lg">Basis Paket</th>
+                          <th className="text-center py-5 px-6 font-bold text-gray-900 text-lg bg-emerald-100 rounded-t-xl">Premium Paket</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-base">
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Hersteller</td>
+                          <td className="py-4 px-6 text-center text-gray-700">TP-Link (Tapo)</td>
+                          <td className="py-4 px-6 text-center text-gray-900 bg-emerald-50/50">tado° (Deutschland)</td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Heizkörper</td>
+                          <td className="py-4 px-6 text-center"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Fußbodenheizung</td>
+                          <td className="py-4 px-6 text-center"><X className="h-6 w-6 text-red-500 mx-auto" /></td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Fenster-Auf-Erkennung</td>
+                          <td className="py-4 px-6 text-center text-gray-600">Optional (extra Sensor)</td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-900 font-medium">Integriert</td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Display</td>
+                          <td className="py-4 px-6 text-center text-gray-600">Standard LED</td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-900 font-medium">Premium Touch-Display</td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">App-Steuerung</td>
+                          <td className="py-4 px-6 text-center"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Sprachsteuerung</td>
+                          <td className="py-4 px-6 text-center text-gray-700">Alexa, Google, Siri</td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-700">Alexa, Google, Siri</td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Geofencing</td>
+                          <td className="py-4 px-6 text-center"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                        </tr>
+                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
+                          <td className="py-4 px-6 font-semibold text-gray-900">Wetter-Integration</td>
+                          <td className="py-4 px-6 text-center"><X className="h-6 w-6 text-red-500 mx-auto" /></td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
+                        </tr>
+                        <tr>
+                          <td className="py-4 px-6 font-semibold text-gray-900">Preis</td>
+                          <td className="py-4 px-6 text-center text-gray-700">Auf Anfrage</td>
+                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-700 rounded-b-xl">Auf Anfrage</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </div>
