@@ -415,67 +415,91 @@ function App() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl p-8 border-2 border-emerald-200 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">🟢🟢🟢🟢🟢</span>
-                    <div>
-                      <h3 className="font-bold text-2xl text-gray-900">Erdgas-Heizung</h3>
-                      <p className="text-emerald-700 font-semibold text-lg">15–30% Ersparnis</p>
+                  <div className="mb-4">
+                    <div className="flex gap-2 mb-4">
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
                     </div>
+                    <h3 className="font-bold text-2xl text-gray-900">Erdgas-Heizung</h3>
+                    <p className="text-emerald-700 font-semibold text-lg mt-1">15–30% Ersparnis</p>
                   </div>
                   <p className="text-gray-700">Ideal geeignet. Maximale Energieeinsparung durch intelligente Steuerung.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl p-8 border-2 border-emerald-200 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">🟢🟢🟢🟢🟢</span>
-                    <div>
-                      <h3 className="font-bold text-2xl text-gray-900">Ölheizung</h3>
-                      <p className="text-emerald-700 font-semibold text-lg">15–30% Ersparnis</p>
+                  <div className="mb-4">
+                    <div className="flex gap-2 mb-4">
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
                     </div>
+                    <h3 className="font-bold text-2xl text-gray-900">Ölheizung</h3>
+                    <p className="text-emerald-700 font-semibold text-lg mt-1">15–30% Ersparnis</p>
                   </div>
                   <p className="text-gray-700">Ideal geeignet. Besonders wirtschaftlich bei hohen Ölpreisen.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-8 border-2 border-yellow-300 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">🟡</span>
-                    <div>
-                      <h3 className="font-bold text-2xl text-gray-900">Pellets / Holz</h3>
-                      <p className="text-yellow-700 font-semibold text-lg">5–10% Ersparnis</p>
+                  <div className="mb-4">
+                    <div className="flex gap-2 mb-4">
+                      <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
                     </div>
+                    <h3 className="font-bold text-2xl text-gray-900">Pellets / Holz</h3>
+                    <p className="text-yellow-700 font-semibold text-lg mt-1">5–10% Ersparnis</p>
                   </div>
                   <p className="text-gray-700">Bedingt geeignet. Moderne Systeme oft bereits optimiert.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-8 border-2 border-yellow-300 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">🟡</span>
-                    <div>
-                      <h3 className="font-bold text-2xl text-gray-900">Fernwärme</h3>
-                      <p className="text-yellow-700 font-semibold text-lg">3–8% Ersparnis</p>
+                  <div className="mb-4">
+                    <div className="flex gap-2 mb-4">
+                      <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
                     </div>
+                    <h3 className="font-bold text-2xl text-gray-900">Fernwärme</h3>
+                    <p className="text-yellow-700 font-semibold text-lg mt-1">3–8% Ersparnis</p>
                   </div>
                   <p className="text-gray-700">Bedingt geeignet. Abhängig von Fernwärme-Regelung.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl p-8 border-2 border-red-300 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">🔴</span>
-                    <div>
-                      <h3 className="font-bold text-2xl text-gray-900">Wärmepumpe</h3>
-                      <p className="text-red-700 font-semibold text-lg">0–5% / oft Mehrverbrauch</p>
+                  <div className="mb-4">
+                    <div className="flex gap-2 mb-4">
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-red-500"></div>
                     </div>
+                    <h3 className="font-bold text-2xl text-gray-900">Wärmepumpe</h3>
+                    <p className="text-red-700 font-semibold text-lg mt-1">0–5% / oft Mehrverbrauch</p>
                   </div>
                   <p className="text-gray-700">Weniger geeignet. Bereits hocheffizient, keine große Ersparnis möglich.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl p-8 border-2 border-red-300 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-4xl">🔴</span>
-                    <div>
-                      <h3 className="font-bold text-2xl text-gray-900">Nachtspeicher</h3>
-                      <p className="text-red-700 font-semibold text-lg">0% Ersparnis</p>
+                  <div className="mb-4">
+                    <div className="flex gap-2 mb-4">
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
                     </div>
+                    <h3 className="font-bold text-2xl text-gray-900">Nachtspeicher</h3>
+                    <p className="text-red-700 font-semibold text-lg mt-1">0% Ersparnis</p>
                   </div>
                   <p className="text-gray-700">Nicht geeignet. Speichersystem bedingt Nutzung fest definierter Ladezeiten.</p>
                 </div>
