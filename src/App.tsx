@@ -176,7 +176,7 @@ function App() {
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
                   Ihr Zuhause.
                   <span className="block bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
-                    Intelligent & Grün.
+                    Intelligent & Umweltbewusst.
                   </span>
                 </h1>
 
