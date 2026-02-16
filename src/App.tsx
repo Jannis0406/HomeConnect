@@ -775,15 +775,6 @@ function App() {
                       </div>
                     </div>
                     <div className="flex gap-4">
-                      <div className="bg-emerald-100 p-3 rounded-xl h-fit">
-                        <Check className="h-6 w-6 text-emerald-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Mesh-WLAN Systeme</h3>
-                        <p className="text-gray-600">Optimale Abdeckung durch moderne Mesh-Technologie.</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
                       <div className="bg-orange-100 p-3 rounded-xl h-fit">
                         <Check className="h-6 w-6 text-orange-600" />
                       </div>
