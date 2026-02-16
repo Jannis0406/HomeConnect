@@ -554,7 +554,6 @@ function App() {
                 <div className="bg-gradient-to-br from-orange-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
                   <div className="text-center">
                     <Thermometer className="h-32 w-32 text-orange-500 mx-auto mb-4" />
-                    <p className="text-gray-600 italic">Bild: Modernes Smart Thermostat</p>
                   </div>
                 </div>
               </div>
@@ -761,7 +760,6 @@ function App() {
                 <div className="bg-gradient-to-br from-blue-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
                   <div className="text-center">
                     <Wifi className="h-32 w-32 text-blue-500 mx-auto mb-4" />
-                    <p className="text-gray-600 italic">Bild: Mesh WLAN System</p>
                   </div>
                 </div>
                 <div>
@@ -790,8 +788,8 @@ function App() {
                         <Check className="h-6 w-6 text-orange-600" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Sicherheitsoptimierung</h3>
-                        <p className="text-gray-600">Maximaler Schutz für Ihr Heimnetzwerk.</p>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Verbesserung der Reichweite durch Access Points oder Repeater</h3>
+                        <p className="text-gray-600">Erweitern Sie Ihr WLAN-Netzwerk in alle Bereiche Ihres Hauses.</p>
                       </div>
                     </div>
                   </div>
@@ -860,7 +858,6 @@ function App() {
                 <div className="bg-gradient-to-br from-green-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
                   <div className="text-center">
                     <Headphones className="h-32 w-32 text-green-500 mx-auto mb-4" />
-                    <p className="text-gray-600 italic">Bild: IT-Support Service</p>
                   </div>
                 </div>
               </div>
