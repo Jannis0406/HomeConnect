@@ -928,7 +928,7 @@ function App() {
 
                 <div className="pt-6 border-t border-gray-200">
                   <p className="text-sm text-gray-500 italic">
-                    Hinweis: Bitte ersetzen Sie die Platzhalter [in eckigen Klammern] mit Ihren tatsächlichen Daten.
+                
                   </p>
                 </div>
               </div>
