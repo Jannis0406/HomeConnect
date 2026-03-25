@@ -889,7 +889,7 @@ function App() {
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Umsatzsteuer-ID</h2>
                   <p className="leading-relaxed">
                     Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-                    [USt-IdNr.]
+                    soon
                   </p>
                 </div>
 
