@@ -864,24 +864,24 @@ function App() {
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
                   <p className="leading-relaxed">
                     HomeConnect Solutions GbR<br />
-                    [Straße und Hausnummer]<br />
-                    [PLZ und Ort]
+                    Am Breiten Stein 1<br />
+                    36284 Hohenroda
                   </p>
                 </div>
 
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Vertreten durch</h2>
                   <p className="leading-relaxed">
-                    [Name Gesellschafter 1]<br />
-                    [Name Gesellschafter 2]
+                    Jannis Claus<br />
+                    Maximilian Orth
                   </p>
                 </div>
 
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Kontakt</h2>
                   <p className="leading-relaxed">
-                    Telefon: [Telefonnummer]<br />
-                    E-Mail: [E-Mail-Adresse]
+                    Telefon: 015204571030<br />
+                    E-Mail: soon
                   </p>
                 </div>
 
@@ -896,8 +896,8 @@ function App() {
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
                   <p className="leading-relaxed">
-                    [Name]<br />
-                    [Adresse]
+                    Jannis Claus<br />
+                    Am breiten Stein 1 ,36284 Hohenroda
                   </p>
                 </div>
 
@@ -959,7 +959,7 @@ function App() {
                 <span className="text-lg font-bold">HomeConnect Solutions</span>
               </div>
               <p className="text-gray-300">
-                Ihr Partner für nachhaltige Smart Home Lösungen in Deutschland.
+                Ihr Partner für nachhaltige Smart Home Lösungen in Osthessen.
               </p>
             </div>
 
