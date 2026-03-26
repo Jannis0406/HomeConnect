@@ -1,5 +1,5 @@
 import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, Check, Menu, X, ChevronDown, Leaf, Zap, Shield, Sun } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 type Page = 'home' | 'thermostats' | 'wlan' | 'support' | 'impressum' | 'datenschutz';
 
@@ -7,6 +7,62 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [formMessage, setFormMessage] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmitContact = async (e: React.FormEvent<HTMLFormElement>, serviceType?: string) => {
+    e.preventDefault();
+    setFormStatus('loading');
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
+      message: formData.get('message') as string,
+      service_type: serviceType || 'general',
+    };
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-contact-email`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseAnonKey}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to send contact request');
+      }
+
+      setFormStatus('success');
+      setFormMessage('Vielen Dank für Ihre Anfrage! Wir werden uns in Kürze bei Ihnen melden.');
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+      setTimeout(() => {
+        setFormStatus('idle');
+        setFormMessage('');
+      }, 5000);
+    } catch (error) {
+      setFormStatus('error');
+      setFormMessage('Es gab einen Fehler beim Senden Ihrer Anfrage. Bitte versuchen Sie es später erneut.');
+      console.error('Error:', error);
+      setTimeout(() => {
+        setFormStatus('idle');
+        setFormMessage('');
+      }, 5000);
+    }
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -331,20 +387,24 @@ function App() {
               </div>
 
               <div className="bg-white rounded-3xl p-8 shadow-2xl">
-                <form className="space-y-6">
+                <form ref={formRef} onSubmit={handleSubmitContact} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Name *</label>
                       <input
                         type="text"
+                        name="name"
+                        required
                         className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
                         placeholder="Ihr Name"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">E-Mail</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">E-Mail *</label>
                       <input
                         type="email"
+                        name="email"
+                        required
                         className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
                         placeholder="ihre@email.de"
                       />
@@ -354,23 +414,40 @@ function App() {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Telefon</label>
                     <input
                       type="tel"
+                      name="phone"
                       className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
                       placeholder="Ihre Telefonnummer"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Ihre Nachricht</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Ihre Nachricht *</label>
                     <textarea
+                      name="message"
                       rows={5}
+                      required
                       className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors resize-none"
                       placeholder="Wie können wir Ihnen helfen?"
                     ></textarea>
                   </div>
+                  {formMessage && (
+                    <div className={`p-4 rounded-xl text-center font-medium ${
+                      formStatus === 'success'
+                        ? 'bg-emerald-50 text-emerald-700 border-2 border-emerald-200'
+                        : 'bg-red-50 text-red-700 border-2 border-red-200'
+                    }`}>
+                      {formMessage}
+                    </div>
+                  )}
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold"
+                    disabled={formStatus === 'loading'}
+                    className={`w-full px-8 py-4 rounded-xl font-semibold transition-all ${
+                      formStatus === 'loading'
+                        ? 'bg-gray-400 text-white cursor-not-allowed'
+                        : 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-xl'
+                    }`}
                   >
-                    Nachricht senden
+                    {formStatus === 'loading' ? 'Wird gesendet...' : 'Nachricht senden'}
                   </button>
                 </form>
               </div>
@@ -505,9 +582,17 @@ function App() {
                 <p className="text-gray-900 text-lg">
                   <span className="font-bold">Unsicher, ob Ihr System geeignet ist?</span> Kontaktieren Sie uns für eine kostenlose, unverbindliche Beratung. Wir analysieren Ihre Heizung und berechnen Ihr individuelles Sparpotenzial.
                 </p>
-                <a href="#kontakt" className="inline-block mt-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all font-semibold">
+                <button
+                  onClick={() => {
+                    navigateToPage('home');
+                    setTimeout(() => {
+                      document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
+                  className="inline-block mt-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all font-semibold"
+                >
                   Kostenlose Analyse anfragen
-                </a>
+                </button>
               </div>
             </div>
           </section>
@@ -600,9 +685,17 @@ function App() {
                     </div>
                   </div>
 
-                  <a href="#kontakt" className="block w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center">
+                  <button
+                    onClick={() => {
+                      navigateToPage('home');
+                      setTimeout(() => {
+                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="block w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center"
+                  >
                     Beratung anfragen
-                  </a>
+                  </button>
                 </div>
 
                 <div className="bg-gradient-to-br from-orange-50 to-emerald-50 rounded-3xl p-8 shadow-xl border-4 border-emerald-400 hover:border-emerald-500 transition-all relative">
@@ -653,9 +746,17 @@ function App() {
                     </div>
                   </div>
 
-                  <a href="#kontakt" className="block w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center">
+                  <button
+                    onClick={() => {
+                      navigateToPage('home');
+                      setTimeout(() => {
+                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="block w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center"
+                  >
                     Beratung anfragen
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -780,9 +881,17 @@ function App() {
                       </div>
                     </div>
                   </div>
-                  <a href="#kontakt" className="inline-block mt-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold">
+                  <button
+                    onClick={() => {
+                      navigateToPage('home');
+                      setTimeout(() => {
+                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="inline-block mt-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold"
+                  >
                     Jetzt Beratung anfragen
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -838,9 +947,17 @@ function App() {
                       </div>
                     </div>
                   </div>
-                  <a href="#kontakt" className="inline-block mt-8 bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold">
+                  <button
+                    onClick={() => {
+                      navigateToPage('home');
+                      setTimeout(() => {
+                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }}
+                    className="inline-block mt-8 bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold"
+                  >
                     Support anfragen
-                  </a>
+                  </button>
                 </div>
                 <div className="bg-gradient-to-br from-green-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
                   <div className="text-center">
@@ -881,7 +998,7 @@ function App() {
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Kontakt</h2>
                   <p className="leading-relaxed">
                     Telefon: 015204571030<br />
-                    E-Mail: soon
+                    E-Mail: <a href="mailto:info@home-connect-solutions.de" className="text-emerald-600 hover:text-emerald-700 font-semibold">info@home-connect-solutions.de</a>
                   </p>
                 </div>
 
@@ -889,7 +1006,7 @@ function App() {
                   <h2 className="text-xl font-bold text-gray-900 mb-3">Umsatzsteuer-ID</h2>
                   <p className="leading-relaxed">
                     Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-                    soon
+                    Wird auf Anfrage bereitgestellt
                   </p>
                 </div>
 
@@ -977,11 +1094,13 @@ function App() {
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center">
                   <Phone className="h-4 w-4 mr-2" />
-                  <span>Auf Anfrage</span>
+                  <span>015204571030</span>
                 </li>
                 <li className="flex items-center">
                   <Mail className="h-4 w-4 mr-2" />
-                  <span>Auf Anfrage</span>
+                  <a href="mailto:info@home-connect-solutions.de" className="hover:text-emerald-400 transition-colors">
+                    info@home-connect-solutions.de
+                  </a>
                 </li>
               </ul>
             </div>
