@@ -1,1126 +1,938 @@
-import { Thermometer, Wifi, Headphones, Home, ChevronRight, Phone, Mail, Check, Menu, X, ChevronDown, Leaf, Zap, Shield, Sun } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Monitor, Wifi, Thermometer, Headphones, ChevronRight, ChevronDown, Phone, Mail, Check, Menu, X, Zap, Shield, Globe, Clock, Users, Star, ArrowRight, Play, Cpu, Server, Cloud, Lock, Settings, Home, Router, Smartphone, Lightbulb, Theater as Thermostat, Cable, Building2, Award, HeartHandshake, Sparkles, Move3d } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
 
-type Page = 'home' | 'thermostats' | 'wlan' | 'support' | 'impressum' | 'datenschutz';
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
-function App() {
+type Page = 'home' | 'it' | 'elektrik' | 'thermostats' | 'wlan' | 'support' | 'impressum' | 'datenschutz';
+
+export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [formMessage, setFormMessage] = useState('');
+  const [scrollY, setScrollY] = useState(0);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmitContact = async (e: React.FormEvent<HTMLFormElement>, serviceType?: string) => {
-    e.preventDefault();
-    setFormStatus('loading');
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
-      message: formData.get('message') as string,
-      service_type: serviceType || 'general',
-    };
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setMobileMenuOpen(false);
+  }, [currentPage]);
 
-    try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const navigateToPage = (page: Page) => setCurrentPage(page);
 
-      const response = await fetch(
-        `${supabaseUrl}/functions/v1/send-contact-email`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabaseAnonKey}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to send contact request');
-      }
-
-      setFormStatus('success');
-      setFormMessage('Vielen Dank für Ihre Anfrage! Wir werden uns in Kürze bei Ihnen melden.');
-      if (formRef.current) {
-        formRef.current.reset();
-      }
-      setTimeout(() => {
-        setFormStatus('idle');
-        setFormMessage('');
-      }, 5000);
-    } catch (error) {
-      setFormStatus('error');
-      setFormMessage('Es gab einen Fehler beim Senden Ihrer Anfrage. Bitte versuchen Sie es später erneut.');
-      console.error('Error:', error);
-      setTimeout(() => {
-        setFormStatus('idle');
-        setFormMessage('');
-      }, 5000);
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleSubmitContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      service: formData.get('service'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const { error } = await supabase.from('contact_requests').insert([data]);
+      if (!error) {
+        setFormSubmitted(true);
+        (e.target as HTMLFormElement).reset();
+      }
+    } catch (err) {
+      console.error('Error:', err);
+    }
+    setIsSubmitting(false);
   };
 
-  const navigateToPage = (page: Page) => {
-    setCurrentPage(page);
-    setMobileMenuOpen(false);
-    setServicesDropdownOpen(false);
-    scrollToTop();
-  };
+  const services = [
+    { icon: Monitor, title: 'IT-Dienstleistungen', desc: 'Windows, Mac, PC-Zusammenbau', gradient: 'from-blue-500 to-cyan-400' },
+    { icon: Zap, title: 'Elektrik', desc: 'Smart Home, Thermostate', gradient: 'from-amber-500 to-orange-400' },
+    { icon: Thermometer, title: 'Smarte Thermostate', desc: 'tado°, TP-Link, Fritz', gradient: 'from-orange-500 to-red-400' },
+    { icon: Wifi, title: 'WLAN-Optimierung', desc: 'Mesh, Router, speed', gradient: 'from-cyan-500 to-blue-400' },
+    { icon: Headphones, title: 'IT-Support', desc: 'Remote & Vor-Ort', gradient: 'from-green-500 to-emerald-400' },
+  ];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
-      <nav className="bg-white/95 backdrop-blur-md border-b border-emerald-100 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <button onClick={() => navigateToPage('home')} className="flex items-center space-x-3 group">
-              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-2.5 rounded-xl group-hover:scale-105 transition-transform shadow-md">
-                <Leaf className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-700 to-blue-700 bg-clip-text text-transparent">
-                HomeConnect Solutions
-              </span>
-            </button>
+  const stats = [
+    { value: '500+', label: 'Zufriedene Kunden' },
+    { value: '24/7', label: 'Support' },
+    { value: '5', label: 'Jahre Erfahrung' },
+    { value: '100%', label: 'Zufriedenheit' },
+  ];
 
-            <div className="hidden lg:flex items-center space-x-2">
-              <button
-                onClick={() => navigateToPage('home')}
-                className={`text-sm font-semibold px-5 py-2.5 rounded-xl transition-all ${
-                  currentPage === 'home'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'text-gray-700 hover:bg-emerald-50'
-                }`}
-              >
-                Home
-              </button>
+  const steps = [
+    { num: '01', title: 'Kontaktaufnahme', desc: 'Rufen Sie uns an oder schreiben Sie uns' },
+    { num: '02', title: 'Analyse', desc: 'Wir prüfen Ihre Anforderungen' },
+    { num: '03', title: 'Angebot', desc: 'Transparente Preisgestaltung' },
+    { num: '04', title: 'Umsetzung', desc: 'Professionelle Realisierung' },
+  ];
 
-              <div className="relative">
-                <button
-                  onMouseEnter={() => setServicesDropdownOpen(true)}
-                  onMouseLeave={() => setServicesDropdownOpen(false)}
-                  className="text-sm font-semibold px-5 py-2.5 rounded-xl transition-all text-gray-700 hover:bg-emerald-50 flex items-center gap-1"
-                >
-                  Leistungen
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+  const testimonials = [
+    { name: 'Familie M.', text: 'Endlich stabiles WLAN im ganzen Haus. Super Service!', rating: 5 },
+    { name: 'Thomas K.', text: 'PC wurde schnell repariert. Sehr empfehlenswert.', rating: 5 },
+    { name: 'Sandra B.', text: 'Die smarten Thermostate sparen uns echt Geld.', rating: 5 },
+  ];
 
-                {servicesDropdownOpen && (
-                  <div
-                    onMouseEnter={() => setServicesDropdownOpen(true)}
-                    onMouseLeave={() => setServicesDropdownOpen(false)}
-                    className="absolute top-full left-0 mt-1 w-56 bg-white rounded-2xl shadow-xl border border-emerald-100 py-2 z-50"
-                  >
-                    <button
-                      onClick={() => navigateToPage('thermostats')}
-                      className="w-full text-left px-4 py-3 hover:bg-emerald-50 transition-colors flex items-center gap-3"
-                    >
-                      <div className="bg-orange-100 p-2 rounded-lg">
-                        <Thermometer className="h-4 w-4 text-orange-600" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">Smarte Thermostate</div>
-                        <div className="text-xs text-gray-500">Intelligent heizen</div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => navigateToPage('wlan')}
-                      className="w-full text-left px-4 py-3 hover:bg-emerald-50 transition-colors flex items-center gap-3"
-                    >
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <Wifi className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">WLAN-Optimierung</div>
-                        <div className="text-xs text-gray-500">Stabiles Netzwerk</div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => navigateToPage('support')}
-                      className="w-full text-left px-4 py-3 hover:bg-emerald-50 transition-colors flex items-center gap-3"
-                    >
-                      <div className="bg-green-100 p-2 rounded-lg">
-                        <Headphones className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">IT-Support</div>
-                        <div className="text-xs text-gray-500">Professionelle Hilfe</div>
-                      </div>
-                    </button>
-                  </div>
-                )}
-              </div>
+  const faqs = [
+    { q: 'Wie schnell könnt ihr vorbeikommen?', a: 'In der Regel innerhalb von 2-3 Werktagen. Dringende Fälle auch schneller.' },
+    { q: 'Bietet ihr auch Fernsupport an?', a: 'Ja, viele Probleme lassen sich per Fernzugriff lösen – schnell und bequem.' },
+    { q: 'Was kostet die Erstberatung?', a: 'Die Erstberatung ist immer kostenlos und unverbindlich.' },
+    { q: 'Arbeitet ihr auch am Wochenende?', a: 'Nach Absprache möglich. Kontaktieren Sie uns für individuelle Termine.' },
+  ];
 
-              <a href="#kontakt" className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-2.5 rounded-xl hover:shadow-lg transition-all font-semibold ml-2">
-                Kontakt
-              </a>
+  // Navigation Component
+  const Navigation = () => (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrollY > 50 ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <button onClick={() => navigateToPage('home')} className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center glow">
+              <Home className="w-5 h-5 text-white" />
             </div>
+            <span className="text-lg font-semibold text-white group-hover:text-cyan-400 transition-colors">HomeConnect</span>
+          </button>
 
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-emerald-50 transition-colors text-gray-700"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center gap-8">
+            {services.map((s) => (
+              <button
+                key={s.title}
+                onClick={() => {
+                  if (s.title === 'IT-Dienstleistungen') navigateToPage('it');
+                  else if (s.title === 'Elektrik') navigateToPage('elektrik');
+                  else if (s.title === 'Smarte Thermostate') navigateToPage('thermostats');
+                  else if (s.title === 'WLAN-Optimierung') navigateToPage('wlan');
+                  else if (s.title === 'IT-Support') navigateToPage('support');
+                }}
+                className="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                {s.title}
+              </button>
+            ))}
+          </div>
+
+          <div className="hidden lg:flex items-center gap-4">
+            <button onClick={scrollToContact} className="px-5 py-2.5 text-sm text-gray-400 hover:text-white transition-colors">
+              Kontakt
+            </button>
+            <button onClick={scrollToContact} className="px-5 py-2.5 text-sm bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full hover:shadow-lg hover:shadow-cyan-500/25 transition-all hover:scale-105">
+              Beratung anfragen
             </button>
           </div>
 
-          {mobileMenuOpen && (
-            <div className="lg:hidden py-4 border-t border-emerald-100">
-              <div className="flex flex-col space-y-2">
-                <button
-                  onClick={() => navigateToPage('home')}
-                  className={`text-left px-4 py-3 rounded-xl transition-all font-semibold ${
-                    currentPage === 'home'
-                      ? 'bg-emerald-500 text-white'
-                      : 'text-gray-700 hover:bg-emerald-50'
-                  }`}
-                >
-                  Home
-                </button>
-                <button
-                  onClick={() => navigateToPage('thermostats')}
-                  className="text-left px-4 py-3 rounded-xl text-gray-700 hover:bg-emerald-50 transition-all font-semibold flex items-center gap-2"
-                >
-                  <Thermometer className="h-4 w-4" />
-                  Smarte Thermostate
-                </button>
-                <button
-                  onClick={() => navigateToPage('wlan')}
-                  className="text-left px-4 py-3 rounded-xl text-gray-700 hover:bg-emerald-50 transition-all font-semibold flex items-center gap-2"
-                >
-                  <Wifi className="h-4 w-4" />
-                  WLAN-Optimierung
-                </button>
-                <button
-                  onClick={() => navigateToPage('support')}
-                  className="text-left px-4 py-3 rounded-xl text-gray-700 hover:bg-emerald-50 transition-all font-semibold flex items-center gap-2"
-                >
-                  <Headphones className="h-4 w-4" />
-                  IT-Support
-                </button>
-                <a href="#kontakt" className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-4 py-3 rounded-xl text-center font-semibold">
-                  Kontakt
-                </a>
-              </div>
-            </div>
-          )}
+          {/* Mobile Menu Button */}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden p-2">
+            {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+          </button>
         </div>
-      </nav>
 
-      {currentPage === 'home' && (
-        <>
-          <section className="relative py-20 sm:py-28 overflow-hidden">
-            <div className="absolute inset-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/50 via-white to-blue-100/50"></div>
-              <div className="absolute top-20 left-20 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl"></div>
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden mt-4 py-6 border-t border-white/10 animate-fade-in">
+            <div className="flex flex-col gap-4">
+              {services.map((s) => (
+                <button
+                  key={s.title}
+                  onClick={() => {
+                    if (s.title === 'IT-Dienstleistungen') navigateToPage('it');
+                    else if (s.title === 'Elektrik') navigateToPage('elektrik');
+                    else if (s.title === 'Smarte Thermostate') navigateToPage('thermostats');
+                    else if (s.title === 'WLAN-Optimierung') navigateToPage('wlan');
+                    else if (s.title === 'IT-Support') navigateToPage('support');
+                  }}
+                  className="text-gray-400 hover:text-white text-left py-2"
+                >
+                  {s.title}
+                </button>
+              ))}
+              <button onClick={scrollToContact} className="mt-4 px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full text-center">
+                Beratung anfragen
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+
+  // Hero Section Component
+  const HeroSection = () => (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-950/50 via-black to-black" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[128px] animate-pulse-slow" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-[128px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
+
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(34,211,238,0.15) 1px, transparent 0)`,
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
+
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-10 animate-float opacity-30">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+            <Monitor className="w-10 h-10 text-white" />
+          </div>
+        </div>
+        <div className="absolute top-40 right-20 animate-float-delayed opacity-30">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-400 flex items-center justify-center">
+            <Wifi className="w-8 h-8 text-white" />
+          </div>
+        </div>
+        <div className="absolute bottom-40 left-20 animate-float opacity-30" style={{ animationDelay: '1s' }}>
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-400 flex items-center justify-center">
+            <Thermometer className="w-7 h-7 text-white" />
+          </div>
+        </div>
+        <div className="absolute bottom-20 right-40 animate-float-delayed opacity-30" style={{ animationDelay: '3s' }}>
+          <div className="w-18 h-18 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center">
+            <Shield className="w-9 h-9 text-white" />
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-fade-in">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+          <span className="text-sm text-gray-400">Premium Smart Home Services aus Osthessen</span>
+        </div>
+
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-blur-in">
+          <span className="text-white">IT, Elektrik &</span>
+          <br />
+          <span className="gradient-text">Smart Home</span>
+        </h1>
+
+        <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          Professionelle IT-Lösungen, smarte Haus-Technik und zuverlässige Elektroarbeiten – alles aus einer Hand.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+          <button onClick={scrollToContact} className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/30 transition-all hover:scale-105 flex items-center gap-2">
+            Kostenlose Beratung
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+          <button onClick={() => navigateToPage('it')} className="group px-8 py-4 border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/5 transition-all flex items-center gap-2">
+            <Play className="w-5 h-5" />
+            Leistungen entdecken
+          </button>
+        </div>
+
+        {/* Floating Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto animate-scale-in" style={{ animationDelay: '0.6s' }}>
+          {stats.map((stat, i) => (
+            <div key={i} className="glass rounded-2xl p-6 hover:bg-white/10 transition-all group">
+              <div className="text-3xl md:text-4xl font-bold gradient-text mb-1">{stat.value}</div>
+              <div className="text-sm text-gray-500">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
+          <div className="w-1 h-2 bg-white/50 rounded-full animate-pulse" />
+        </div>
+      </div>
+    </section>
+  );
+
+  // Services Section
+  const ServicesSection = () => (
+    <section className="relative py-32 bg-black">
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm text-gray-400">Unsere Expertise</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <span className="text-white">Leistungen für</span>
+            <span className="gradient-text"> jedes Zuhause</span>
+          </h2>
+          <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+            Von der IT-Infrastruktur bis zur smarten Heizung – wir machen Ihr Zuhause intelligent.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                if (service.title === 'IT-Dienstleistungen') navigateToPage('it');
+                else if (service.title === 'Elektrik') navigateToPage('elektrik');
+                else if (service.title === 'Smarte Thermostate') navigateToPage('thermostats');
+                else if (service.title === 'WLAN-Optimierung') navigateToPage('wlan');
+                else if (service.title === 'IT-Support') navigateToPage('support');
+              }}
+              className="group glass-hover rounded-3xl p-8 text-left hover:-translate-y-2 transition-all duration-500"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 group-hover:shadow-lg group-hover:shadow-cyan-500/25`}>
+                <service.icon className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-cyan-400 transition-colors">{service.title}</h3>
+              <p className="text-gray-500 mb-4">{service.desc}</p>
+              <div className="flex items-center text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-sm font-medium">Mehr erfahren</span>
+                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  // Why Us Section
+  const WhyUsSection = () => {
+    const reasons = [
+      { icon: Award, title: 'Zertifizierte Experten', desc: 'Fachinformatiker & Elektriker' },
+      { icon: Clock, title: 'Schnelle Reaktion', desc: 'Innerhalb von 2-3 Tagen vor Ort' },
+      { icon: Shield, title: 'Transparente Preise', desc: 'Keine versteckten Kosten' },
+      { icon: HeartHandshake, title: 'Persöhnlicher Service', desc: 'Individuelle Beratung' },
+    ];
+
+    return (
+      <section className="relative py-32 bg-gradient-to-b from-black via-blue-950/20 to-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+                <Zap className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm text-gray-400">Warum wir?</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <span className="text-white">Ihre Vorteile</span>
+                <br />
+                <span className="gradient-text">mit HomeConnect</span>
+              </h2>
+              <p className="text-xl text-gray-400 mb-10">
+                Zwei Spezialisten unter einem Dach. IT und Elektrik nahtlos vernetzt – für Ihr smartes Zuhause.
+              </p>
+
+              <div className="grid sm:grid-cols-2 gap-6">
+                {reasons.map((reason, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="w-12 h-12 rounded-xl glass flex items-center justify-center flex-shrink-0">
+                      <reason.icon className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-1">{reason.title}</h3>
+                      <p className="text-sm text-gray-500">{reason.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-              <div className="text-center max-w-4xl mx-auto">
-                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-emerald-200 mb-8 shadow-sm">
-                  <Leaf className="h-5 w-5 text-emerald-600" />
-                  <span className="text-emerald-700 font-semibold text-sm">Nachhaltige Smart Home Lösungen</span>
-                </div>
-
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                  Ihr Zuhause.
-                  <span className="block bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
-                    Intelligent & Umweltbewusst.
-                  </span>
-                </h1>
-
-                <p className="text-xl text-gray-600 mb-10 leading-relaxed">
-                  Energieeffiziente Smart Home Technologie für mehr Komfort und geringere Kosten. Professionell installiert und nachhaltig gedacht.
-                </p>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a href="#leistungen" className="group bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all flex items-center justify-center font-semibold">
-                    Unsere Lösungen
-                    <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                  <a href="#kontakt" className="bg-white text-emerald-700 px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold border-2 border-emerald-200">
-                    Kostenlose Beratung
-                  </a>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-3xl blur-3xl" />
+              <div className="relative glass rounded-3xl p-8 md:p-12">
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center">
+                      <Monitor className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white">Jannis Claus</h3>
+                      <p className="text-blue-400 text-sm">Fachinformatiker</p>
+                    </div>
+                  </div>
+                  <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-amber-500 flex items-center justify-center">
+                      <Zap className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white">Maximilian Orth</h3>
+                      <p className="text-amber-400 text-sm">Elektriker</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </div>
+      </section>
+    );
+  };
 
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid md:grid-cols-4 gap-8 text-center">
-                <div className="p-6">
-                  <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <Leaf className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">30%</h3>
-                  <p className="text-gray-600">Energieeinsparung</p>
+  // Smart Home Showcase
+  const SmartHomeSection = () => (
+    <section className="relative py-32 bg-black overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-30">
+          <div className="absolute inset-0 rounded-full border border-cyan-500/20 animate-pulse-slow" />
+          <div className="absolute inset-20 rounded-full border border-cyan-500/30 animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          <div className="absolute inset-40 rounded-full border border-cyan-500/40 animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        </div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+            <Home className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm text-gray-400">Smart Home</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <span className="text-white">Ein Haus.</span>
+            <br />
+            <span className="gradient-text">Vernetzt. Intelligent.</span>
+          </h2>
+          <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+            Thermostate, WLAN, Beleuchtung – wir vernetzen Ihr Zuhause für mehr Komfort und Effizienz.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="glass rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 group">
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-orange-500 to-red-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Thermometer className="w-10 h-10 text-white" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-3">Smarte Thermostate</h3>
+            <p className="text-gray-500">tado°, TP-Link, Fritz – bis zu 30% Heizkosten sparen</p>
+          </div>
+
+          <div className="glass rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 group">
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Wifi className="w-10 h-10 text-white" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-3">Ganzes Haus WLAN</h3>
+            <p className="text-gray-500">Mesh-Systeme für stabilen Empfang in jedem Raum</p>
+          </div>
+
+          <div className="glass rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 group">
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Lightbulb className="w-10 h-10 text-white" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-3">Smarte Beleuchtung</h3>
+            <p className="text-gray-500">Automatisch, stimmungsvoll, energiesparend</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  // Process Section
+  const ProcessSection = () => (
+    <section className="relative py-32 bg-gradient-to-b from-black via-blue-950/10 to-black">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+            <Move3d className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm text-gray-400">So funktioniert's</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <span className="gradient-text">4 Schritte</span>
+            <span className="text-white"> zum smarten Zuhause</span>
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {steps.map((step, i) => (
+            <div key={i} className="relative group">
+              <div className="glass rounded-3xl p-8 hover:bg-white/10 transition-all duration-500 h-full">
+                <div className="text-6xl font-bold gradient-text opacity-20 mb-4">{step.num}</div>
+                <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-cyan-400 transition-colors">{step.title}</h3>
+                <p className="text-gray-500">{step.desc}</p>
+              </div>
+              {i < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-1/2 -right-4 w-8 text-cyan-500/30">
+                  <ChevronRight className="w-8 h-8" />
                 </div>
-                <div className="p-6">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <Zap className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">24/7</h3>
-                  <p className="text-gray-600">Intelligente Steuerung</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  // Testimonials Section
+  const TestimonialsSection = () => (
+    <section className="relative py-32 bg-black">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+            <Users className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm text-gray-400">Kundenstimmen</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold">
+            <span className="text-white">Das sagen unsere</span>
+            <span className="gradient-text"> Kunden</span>
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {testimonials.map((t, i) => (
+            <div key={i} className="glass rounded-3xl p-8 hover:bg-white/10 transition-all duration-500">
+              <div className="flex gap-1 mb-4">
+                {[...Array(t.rating)].map((_, j) => (
+                  <Star key={j} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-gray-400 mb-6 leading-relaxed">"{t.text}"</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">{t.name[0]}</span>
                 </div>
-                <div className="p-6">
-                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <Shield className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">100%</h3>
-                  <p className="text-gray-600">Professionell</p>
+                <span className="text-white font-medium">{t.name}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  // FAQ Section
+  const FaqSection = () => (
+    <section className="relative py-32 bg-gradient-to-b from-black via-blue-950/10 to-black">
+      <div className="max-w-3xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+            <Settings className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm text-gray-400">FAQ</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold">
+            <span className="text-white">Häufige</span>
+            <span className="gradient-text"> Fragen</span>
+          </h2>
+        </div>
+
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveFaq(activeFaq === i ? null : i)}
+              className="w-full glass rounded-2xl p-6 text-left hover:bg-white/10 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-white font-medium pr-8">{faq.q}</span>
+                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform duration-300 ${activeFaq === i ? 'rotate-180' : ''}`} />
+              </div>
+              <div className={`overflow-hidden transition-all duration-300 ${activeFaq === i ? 'max-h-40 mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <p className="text-gray-500">{faq.a}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  // Contact Section
+  const ContactSection = () => (
+    <section id="contact" className="relative py-32 bg-black">
+      <div className="absolute inset-0">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+              <Mail className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-gray-400">Kontakt</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="text-white">Lassen Sie uns</span>
+              <br />
+              <span className="gradient-text">sprechen</span>
+            </h2>
+            <p className="text-xl text-gray-500 mb-8">
+              Kostenlose Beratung – wir helfen Ihnen gerne weiter.
+            </p>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl glass flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-cyan-400" />
                 </div>
-                <div className="p-6">
-                  <div className="bg-gradient-to-br from-green-500 to-green-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <Sun className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">CO₂</h3>
-                  <p className="text-gray-600">Klimafreundlich</p>
+                <div>
+                  <p className="text-sm text-gray-500">Telefon</p>
+                  <p className="text-white font-medium">015204571030</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl glass flex items-center justify-center">
+                  <Mail className="w-6 h-6 text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">E-Mail</p>
+                  <p className="text-white font-medium">info@home-connect-solutions.de</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl glass flex items-center justify-center">
+                  <Building2 className="w-6 h-6 text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Adresse</p>
+                  <p className="text-white font-medium">Am Breiten Stein 1, 36284 Hohenroda</p>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
-          <section id="leistungen" className="py-20 bg-gradient-to-b from-emerald-50/50 to-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">Unsere Leistungen</h2>
-                <p className="text-xl text-gray-600 max-w-2xl mx-auto">Nachhaltige Smart Home Technologie für Ihr Zuhause</p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-8">
-                <div onClick={() => navigateToPage('thermostats')} className="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all cursor-pointer border-2 border-transparent hover:border-emerald-200">
-                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <Thermometer className="h-8 w-8 text-white" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-3xl blur-3xl" />
+            <div className="relative glass rounded-3xl p-8">
+              {formSubmitted ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center mb-6">
+                    <Check className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Smarte Thermostate</h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    Bis zu 30% Heizkosten sparen durch intelligente Temperatursteuerung.
-                  </p>
-                  <ul className="space-y-3 text-gray-600 mb-6">
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Energieeffizient & klimafreundlich</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>App-Steuerung von überall</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Professionelle Installation</span>
-                    </li>
-                  </ul>
-                  <button className="text-emerald-600 font-semibold flex items-center group-hover:text-emerald-700">
-                    Mehr erfahren
-                    <ChevronRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  <h3 className="text-2xl font-bold text-white mb-2">Vielen Dank!</h3>
+                  <p className="text-gray-400">Wir melden uns schnellstmöglich bei Ihnen.</p>
                 </div>
-
-                <div onClick={() => navigateToPage('wlan')} className="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all cursor-pointer border-2 border-transparent hover:border-emerald-200">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <Wifi className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">WLAN-Optimierung</h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    Stabiles und schnelles Internet in jedem Raum Ihres Zuhauses.
-                  </p>
-                  <ul className="space-y-3 text-gray-600 mb-6">
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Vollständige Netzwerkanalyse</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Optimale Abdeckung</span>
-                    </li>
-                  </ul>
-                  <button className="text-emerald-600 font-semibold flex items-center group-hover:text-emerald-700">
-                    Mehr erfahren
-                    <ChevronRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-
-                <div onClick={() => navigateToPage('support')} className="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all cursor-pointer border-2 border-transparent hover:border-emerald-200">
-                  <div className="bg-gradient-to-br from-green-500 to-green-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <Headphones className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">IT-Support</h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    Kompetente Unterstützung für alle technischen Fragen.
-                  </p>
-                  <ul className="space-y-3 text-gray-600 mb-6">
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Schnelle Hilfe bei Problemen</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Remote & Vor-Ort Service</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span>Faire Preise</span>
-                    </li>
-                  </ul>
-                  <button className="text-emerald-600 font-semibold flex items-center group-hover:text-emerald-700">
-                    Mehr erfahren
-                    <ChevronRight className="ml-1 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="kontakt" className="py-20 bg-gradient-to-br from-emerald-500 to-emerald-600">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Bereit für Ihr Smart Home?</h2>
-                <p className="text-xl text-emerald-50">Kontaktieren Sie uns für eine kostenlose Beratung</p>
-              </div>
-
-              <div className="bg-white rounded-3xl p-8 shadow-2xl">
+              ) : (
                 <form ref={formRef} onSubmit={handleSubmitContact} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Name *</label>
-                      <input
-                        type="text"
-                        name="name"
-                        required
-                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
-                        placeholder="Ihr Name"
-                      />
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Name *</label>
+                      <input name="name" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-cyan-500 focus:outline-none transition-colors" placeholder="Ihr Name" />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">E-Mail *</label>
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
-                        placeholder="ihre@email.de"
-                      />
+                      <label className="block text-sm font-medium text-gray-400 mb-2">E-Mail *</label>
+                      <input name="email" type="email" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-cyan-500 focus:outline-none transition-colors" placeholder="ihre@email.de" />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Telefon</label>
+                      <input name="phone" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-cyan-500 focus:outline-none transition-colors" placeholder="0123 456789" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Service</label>
+                      <select name="service" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition-colors">
+                        <option value="" className="bg-gray-900">Bitte wählen</option>
+                        <option value="it" className="bg-gray-900">IT-Dienstleistungen</option>
+                        <option value="elektrik" className="bg-gray-900">Elektrik</option>
+                        <option value="thermostats" className="bg-gray-900">Smarte Thermostate</option>
+                        <option value="wlan" className="bg-gray-900">WLAN-Optimierung</option>
+                        <option value="support" className="bg-gray-900">IT-Support</option>
+                      </select>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Telefon</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors"
-                      placeholder="Ihre Telefonnummer"
-                    />
+                    <label className="block text-sm font-medium text-gray-400 mb-2">Nachricht</label>
+                    <textarea name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-cyan-500 focus:outline-none transition-colors resize-none" placeholder="Ihre Nachricht..." />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Ihre Nachricht *</label>
-                    <textarea
-                      name="message"
-                      rows={5}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-colors resize-none"
-                      placeholder="Wie können wir Ihnen helfen?"
-                    ></textarea>
-                  </div>
-                  {formMessage && (
-                    <div className={`p-4 rounded-xl text-center font-medium ${
-                      formStatus === 'success'
-                        ? 'bg-emerald-50 text-emerald-700 border-2 border-emerald-200'
-                        : 'bg-red-50 text-red-700 border-2 border-red-200'
-                    }`}>
-                      {formMessage}
-                    </div>
-                  )}
                   <button
                     type="submit"
-                    disabled={formStatus === 'loading'}
-                    className={`w-full px-8 py-4 rounded-xl font-semibold transition-all ${
-                      formStatus === 'loading'
-                        ? 'bg-gray-400 text-white cursor-not-allowed'
-                        : 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:shadow-xl'
-                    }`}
+                    disabled={isSubmitting}
+                    className="w-full py-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-xl font-semibold text-lg hover:shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {formStatus === 'loading' ? 'Wird gesendet...' : 'Nachricht senden'}
+                    {isSubmitting ? (
+                      <>Wird gesendet...</>
+                    ) : (
+                      <>
+                        Nachricht senden
+                        <ArrowRight className="w-5 h-5" />
+                      </>
+                    )}
                   </button>
                 </form>
-              </div>
+              )}
             </div>
-          </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  // Footer
+  const Footer = () => (
+    <footer className="relative pt-20 pb-8 bg-black border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+                <Home className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-lg font-semibold text-white">HomeConnect</span>
+            </div>
+            <p className="text-gray-500 mb-6">
+              IT, Elektrik & Smart Home aus Osthessen. Ihr Partner für intelligente Haustechnik.
+            </p>
+            <div className="flex gap-4">
+              <a href="tel:015204571030" className="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-white/10 transition-colors">
+                <Phone className="w-5 h-5 text-gray-400" />
+              </a>
+              <a href="mailto:info@home-connect-solutions.de" className="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-white/10 transition-colors">
+                <Mail className="w-5 h-5 text-gray-400" />
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-4">Leistungen</h3>
+            <ul className="space-y-3">
+              <li><button onClick={() => navigateToPage('it')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">IT-Dienstleistungen</button></li>
+              <li><button onClick={() => navigateToPage('elektrik')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">Elektrik</button></li>
+              <li><button onClick={() => navigateToPage('thermostats')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">Smarte Thermostate</button></li>
+              <li><button onClick={() => navigateToPage('wlan')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">WLAN-Optimierung</button></li>
+              <li><button onClick={() => navigateToPage('support')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">IT-Support</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-4">Unternehmen</h3>
+            <ul className="space-y-3">
+              <li><button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">Kontakt</button></li>
+              <li><button onClick={() => navigateToPage('impressum')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">Impressum</button></li>
+              <li><button onClick={() => navigateToPage('datenschutz')} className="text-gray-500 hover:text-cyan-400 transition-colors text-sm">Datenschutz</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-4">Kontakt</h3>
+            <ul className="space-y-3 text-sm text-gray-500">
+              <li>HomeConnect Solutions GbR</li>
+              <li>Am Breiten Stein 1</li>
+              <li>36284 Hohenroda</li>
+              <li className="pt-2">
+                <a href="tel:015204571030" className="hover:text-cyan-400 transition-colors">015204571030</a>
+              </li>
+              <li>
+                <a href="mailto:info@home-connect-solutions.de" className="hover:text-cyan-400 transition-colors">info@home-connect-solutions.de</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} HomeConnect Solutions. Alle Rechte vorbehalten.</p>
+          <p className="text-gray-700 text-xs">Mit Liebe gemacht in Osthessen</p>
+        </div>
+      </div>
+    </footer>
+  );
+
+  // Service Page Template
+  const ServicePage = ({ icon: Icon, title, subtitle, gradient, features, items }: { icon: any, title: string, subtitle: string, gradient: string, features: { icon: any, title: string, items: string[] }[] }) => (
+    <div className="min-h-screen bg-black pt-24">
+      {/* Hero */}
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className={`absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r ${gradient} opacity-20 rounded-full blur-[128px]`} />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[128px]" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6 text-center">
+          <div className={`w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-8 premium-shadow`}>
+            <Icon className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{title}</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">{subtitle}</p>
+          <button onClick={scrollToContact} className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all inline-flex items-center gap-2">
+            Beratung anfragen
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, i) => (
+              <div key={i} className="glass rounded-3xl p-8 hover:bg-white/10 transition-all duration-500">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-400/20 flex items-center justify-center mb-6">
+                  <feature.icon className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-4">{feature.title}</h3>
+                <ul className="space-y-3">
+                  {feature.items.map((item, j) => (
+                    <li key={j} className="flex items-start gap-2 text-gray-500 text-sm">
+                      <Check className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <ContactSection />
+      <Footer />
+    </div>
+  );
+
+  // Main Render
+  return (
+    <div className="min-h-screen bg-black">
+      <Navigation />
+
+      {currentPage === 'home' && (
+        <>
+          <HeroSection />
+          <ServicesSection />
+          <WhyUsSection />
+          <SmartHomeSection />
+          <ProcessSection />
+          <TestimonialsSection />
+          <FaqSection />
+          <ContactSection />
+          <Footer />
         </>
       )}
 
+      {currentPage === 'it' && (
+        <ServicePage
+          icon={Monitor}
+          title="IT-Dienstleistungen"
+          subtitle="Windows, Mac, PC-Zusammenbau, Netzwerk – kompetent und zuverlässig"
+          gradient="from-blue-500 to-cyan-400"
+          features={[
+            { icon: Monitor, title: 'Windows-Systeme', items: ['Installation & Neuaufsetzen', 'Fehlerbehebung', 'Viren-Entfernung', 'Windows 10/11 Upgrade'] },
+            { icon: Cpu, title: 'Mac & macOS', items: ['macOS-Updates', 'iCloud & Apple-ID', 'Migration & Daten', 'Performance-Optimierung'] },
+            { icon: Server, title: 'PC-Zusammenbau', items: ['Hardware-Beratung', 'Gaming-PCs', 'Arbeits-PCs', 'Hardware-Upgrade'] },
+            { icon: Wifi, title: 'Netzwerk & WLAN', items: ['Router-Einrichtung', 'Mesh-Systeme', 'NAS & Drucker', 'Netzwerk-Absicherung'] },
+            { icon: Cloud, title: 'Cloud & Daten', items: ['Cloud-Backup', 'Daten-Sync', 'Sicherheits-Backup', 'Daten-Wiederherstellung'] },
+            { icon: Lock, title: 'Sicherheit', items: ['Virenschutz', 'Firewall', 'Password-Manager', 'Verschlüsselung'] },
+          ]}
+        />
+      )}
+
+      {currentPage === 'elektrik' && (
+        <ServicePage
+          icon={Zap}
+          title="Elektrik"
+          subtitle="Thermostat-Installation und einfache Elektroarbeiten – zuverlässig und sauber"
+          gradient="from-amber-500 to-orange-400"
+          features={[
+            { icon: Thermometer, title: 'Thermostat-Montage', items: ['tado° Installation', 'TP-Link Tapo', 'Fritz DECT', 'App-Einrichtung'] },
+            { icon: Lightbulb, title: 'Beleuchtung', items: ['Deckenlampen', 'Wandleuchten', 'LED-Streifen', 'Außenbeleuchtung'] },
+            { icon: Cable, title: 'Steckdosen & Schalter', items: ['Tausch', 'Neuinstallation', 'Smart Home ready', 'USB-Ladesteckdosen'] },
+            { icon: Settings, title: 'Reparaturen', items: ['Fehlersuche', 'Kabelreparatur', 'Klingelanlagen', 'Bewegungsmelder'] },
+          ]}
+        />
+      )}
+
       {currentPage === 'thermostats' && (
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-emerald-50 pb-16">
-          <section className="relative bg-gradient-to-br from-orange-100 via-white to-orange-50 py-20 overflow-hidden">
-            <div className="absolute inset-0 opacity-30">
-              <div className="absolute top-10 left-10 w-96 h-96 bg-orange-200 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-200 rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-3xl mb-6 shadow-2xl">
-                  <Thermometer className="h-16 w-16 text-white" />
-                </div>
-                <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">
-                  Smarte Thermostate
-                </h1>
-                <p className="text-2xl text-gray-600 max-w-3xl mx-auto">
-                  Intelligent heizen, Energie sparen & Klima schützen
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Ist Ihre Heizung geeignet?</h2>
-                <p className="text-xl text-gray-600 max-w-2xl mx-auto">Sehen Sie sofort, wie viel Energie Sie sparen können</p>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl p-8 border-2 border-emerald-200 shadow-lg">
-                  <div className="mb-4">
-                    <div className="flex gap-2 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                    </div>
-                    <h3 className="font-bold text-2xl text-gray-900">Erdgas-Heizung</h3>
-                    <p className="text-emerald-700 font-semibold text-lg mt-1">15–30% Ersparnis</p>
-                  </div>
-                  <p className="text-gray-700">Ideal geeignet. Maximale Energieeinsparung durch intelligente Steuerung.</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl p-8 border-2 border-emerald-200 shadow-lg">
-                  <div className="mb-4">
-                    <div className="flex gap-2 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-emerald-500"></div>
-                    </div>
-                    <h3 className="font-bold text-2xl text-gray-900">Ölheizung</h3>
-                    <p className="text-emerald-700 font-semibold text-lg mt-1">15–30% Ersparnis</p>
-                  </div>
-                  <p className="text-gray-700">Ideal geeignet. Besonders wirtschaftlich bei hohen Ölpreisen.</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-8 border-2 border-yellow-300 shadow-lg">
-                  <div className="mb-4">
-                    <div className="flex gap-2 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                    </div>
-                    <h3 className="font-bold text-2xl text-gray-900">Pellets / Holz</h3>
-                    <p className="text-yellow-700 font-semibold text-lg mt-1">5–10% Ersparnis</p>
-                  </div>
-                  <p className="text-gray-700">Bedingt geeignet. Moderne Systeme oft bereits optimiert.</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-8 border-2 border-yellow-300 shadow-lg">
-                  <div className="mb-4">
-                    <div className="flex gap-2 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                    </div>
-                    <h3 className="font-bold text-2xl text-gray-900">Fernwärme</h3>
-                    <p className="text-yellow-700 font-semibold text-lg mt-1">3–8% Ersparnis</p>
-                  </div>
-                  <p className="text-gray-700">Bedingt geeignet. Abhängig von Fernwärme-Regelung.</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl p-8 border-2 border-red-300 shadow-lg">
-                  <div className="mb-4">
-                    <div className="flex gap-2 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                    </div>
-                    <h3 className="font-bold text-2xl text-gray-900">Wärmepumpe</h3>
-                    <p className="text-red-700 font-semibold text-lg mt-1">0–5% / oft Mehrverbrauch</p>
-                  </div>
-                  <p className="text-gray-700">Weniger geeignet. Bereits hocheffizient, keine große Ersparnis möglich.</p>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl p-8 border-2 border-red-300 shadow-lg">
-                  <div className="mb-4">
-                    <div className="flex gap-2 mb-4">
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                      <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-                    </div>
-                    <h3 className="font-bold text-2xl text-gray-900">Nachtspeicher</h3>
-                    <p className="text-red-700 font-semibold text-lg mt-1">0% Ersparnis</p>
-                  </div>
-                  <p className="text-gray-700">Nicht geeignet. Speichersystem bedingt Nutzung fest definierter Ladezeiten.</p>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-emerald-100 to-blue-100 rounded-3xl p-8 border-2 border-emerald-300">
-                <p className="text-gray-900 text-lg">
-                  <span className="font-bold">Unsicher, ob Ihr System geeignet ist?</span> Kontaktieren Sie uns für eine kostenlose, unverbindliche Beratung. Wir analysieren Ihre Heizung und berechnen Ihr individuelles Sparpotenzial.
-                </p>
-                <button
-                  onClick={() => {
-                    navigateToPage('home');
-                    setTimeout(() => {
-                      document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="inline-block mt-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all font-semibold"
-                >
-                  Kostenlose Analyse anfragen
-                </button>
-              </div>
-            </div>
-          </section>
-
-          <section className="py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-                <div>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-6">Warum smarte Thermostate?</h2>
-                  <div className="space-y-6">
-                    <div className="flex gap-4">
-                      <div className="bg-emerald-100 p-3 rounded-xl h-fit">
-                        <Leaf className="h-6 w-6 text-emerald-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Bis zu 30% Energieeinsparung</h3>
-                        <p className="text-gray-600">Reduzieren Sie Ihre Heizkosten und CO₂-Emissionen durch intelligente Temperatursteuerung.</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <div className="bg-blue-100 p-3 rounded-xl h-fit">
-                        <Zap className="h-6 w-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Automatische Anpassung</h3>
-                        <p className="text-gray-600">Das System lernt Ihre Gewohnheiten und passt die Temperatur automatisch an.</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <div className="bg-orange-100 p-3 rounded-xl h-fit">
-                        <Sun className="h-6 w-6 text-orange-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Steuerung von überall</h3>
-                        <p className="text-gray-600">Kontrollieren Sie Ihre Heizung bequem per App - zu Hause oder unterwegs.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gradient-to-br from-orange-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
-                  <div className="text-center">
-                    <Thermometer className="h-32 w-32 text-orange-500 mx-auto mb-4" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">Unsere Pakete</h2>
-                <p className="text-xl text-gray-600">Wählen Sie die passende Lösung für Ihr Zuhause</p>
-              </div>
-
-              <div className="grid lg:grid-cols-2 gap-8">
-                <div className="bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-200 hover:border-emerald-300 transition-all">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-6 py-3 rounded-2xl text-center mb-6">
-                    <h3 className="text-3xl font-bold">Basis Paket</h3>
-                    <p className="text-blue-100 mt-1">TP-Link Hardware</p>
-                  </div>
-
-                  <div className="mb-6">
-                    <div className="text-center py-4">
-                      <div className="text-3xl font-bold text-gray-900">Preis auf Anfrage</div>
-                      <p className="text-sm text-gray-500 mt-1">nach individueller Beratung</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-8">
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">Für normale Heizkörper</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">LED-Display mit Temperaturanzeige</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">App-Steuerung & Zeitpläne</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">Sprachsteuerung (Alexa, Google, Siri)</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">Geofencing-Funktion</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">Professionelle Installation & Support</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      navigateToPage('home');
-                      setTimeout(() => {
-                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    }}
-                    className="block w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center"
-                  >
-                    Beratung anfragen
-                  </button>
-                </div>
-
-                <div className="bg-gradient-to-br from-orange-50 to-emerald-50 rounded-3xl p-8 shadow-xl border-4 border-emerald-400 hover:border-emerald-500 transition-all relative">
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                    EMPFOHLEN
-                  </div>
-
-                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white px-6 py-3 rounded-2xl text-center mb-6 mt-6">
-                    <h3 className="text-3xl font-bold">Premium Paket</h3>
-                    <p className="text-orange-100 mt-1">tado° Hardware</p>
-                  </div>
-
-                  <div className="mb-6">
-                    <div className="text-center py-4">
-                      <div className="text-3xl font-bold text-gray-900">Preis auf Anfrage</div>
-                      <p className="text-sm text-gray-600 mt-1">nach individueller Beratung</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-8">
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Premium Touch-Display</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Für Heizkörper & Fußbodenheizung</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Deutscher Premium-Hersteller</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Erweiterte App-Funktionen</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Fenster-Auf-Erkennung integriert</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Wetter-Integration & Geofencing</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Check className="h-5 w-5 text-emerald-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-900 font-medium">Premium-Support & Installation</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      navigateToPage('home');
-                      setTimeout(() => {
-                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    }}
-                    className="block w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-semibold text-center"
-                  >
-                    Beratung anfragen
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-20">
-                <div className="text-center mb-12">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-4">Direkt-Vergleich</h2>
-                  <p className="text-xl text-gray-600">Alle Features im Überblick</p>
-                </div>
-
-                <div className="bg-white rounded-3xl shadow-xl border-2 border-emerald-100 overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b-2 border-emerald-200 bg-gradient-to-r from-emerald-50 to-blue-50">
-                          <th className="text-left py-5 px-6 font-bold text-gray-900 text-lg">Merkmal</th>
-                          <th className="text-center py-5 px-6 font-bold text-gray-900 text-lg">Basis Paket</th>
-                          <th className="text-center py-5 px-6 font-bold text-gray-900 text-lg bg-emerald-100 rounded-t-xl">Premium Paket</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-base">
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Hersteller</td>
-                          <td className="py-4 px-6 text-center text-gray-700">TP-Link (Tapo)</td>
-                          <td className="py-4 px-6 text-center text-gray-900 bg-emerald-50/50">tado° (Deutschland)</td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Heizkörper</td>
-                          <td className="py-4 px-6 text-center"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Fußbodenheizung</td>
-                          <td className="py-4 px-6 text-center"><X className="h-6 w-6 text-red-500 mx-auto" /></td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Fenster-Auf-Erkennung</td>
-                          <td className="py-4 px-6 text-center text-gray-600">Optional (extra Sensor)</td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-900 font-medium">Integriert</td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Display</td>
-                          <td className="py-4 px-6 text-center text-gray-600">Standard LED</td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-900 font-medium">Premium Touch-Display</td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">App-Steuerung</td>
-                          <td className="py-4 px-6 text-center"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Sprachsteuerung</td>
-                          <td className="py-4 px-6 text-center text-gray-700">Alexa, Google, Siri</td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-700">Alexa, Google, Siri</td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Geofencing</td>
-                          <td className="py-4 px-6 text-center"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                        </tr>
-                        <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                          <td className="py-4 px-6 font-semibold text-gray-900">Wetter-Integration</td>
-                          <td className="py-4 px-6 text-center"><X className="h-6 w-6 text-red-500 mx-auto" /></td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50"><Check className="h-6 w-6 text-emerald-600 mx-auto" /></td>
-                        </tr>
-                        <tr>
-                          <td className="py-4 px-6 font-semibold text-gray-900">Preis</td>
-                          <td className="py-4 px-6 text-center text-gray-700">Auf Anfrage</td>
-                          <td className="py-4 px-6 text-center bg-emerald-50/50 text-gray-700 rounded-b-xl">Auf Anfrage</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+        <ServicePage
+          icon={Thermometer}
+          title="Smarte Thermostate"
+          subtitle="Bis zu 30% Heizkosten sparen mit tado° oder TP-Link"
+          gradient="from-orange-500 to-red-400"
+          features={[
+            { icon: Thermometer, title: 'tado° Premium', items: ['Touch-Display', 'Fenster-Erkennung', 'Wetter-Integration', 'Fußbodenheizung'] },
+            { icon: Settings, title: 'TP-Link Tapo', items: ['LED-Display', 'App-Steuerung', 'Geofencing', 'Zeitpläne'] },
+            { icon: Smartphone, title: 'App-Steuerung', items: ['iOS & Android', 'Sprachsteuerung', 'Fernbedienung', 'Automatisierung'] },
+            { icon: Shield, title: 'Kompatibilität', items: ['Erdgas-Heizung', 'Ölheizung', 'Fernwärme', 'Pellets'] },
+          ]}
+        />
       )}
 
       {currentPage === 'wlan' && (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 pb-16">
-          <section className="relative bg-gradient-to-br from-blue-100 via-white to-blue-50 py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-3xl mb-6 shadow-2xl">
-                  <Wifi className="h-16 w-16 text-white" />
-                </div>
-                <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">WLAN-Optimierung</h1>
-                <p className="text-2xl text-gray-600 max-w-3xl mx-auto">Stabiles Internet in jedem Raum</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-                <div className="bg-gradient-to-br from-blue-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
-                  <div className="text-center">
-                    <Wifi className="h-32 w-32 text-blue-500 mx-auto mb-4" />
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-6">Professionelle Netzwerkoptimierung</h2>
-                  <div className="space-y-6">
-                    <div className="flex gap-4">
-                      <div className="bg-blue-100 p-3 rounded-xl h-fit">
-                        <Check className="h-6 w-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Vollständige Analyse</h3>
-                        <p className="text-gray-600">Wir analysieren Ihr Netzwerk und identifizieren Schwachstellen.</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <div className="bg-orange-100 p-3 rounded-xl h-fit">
-                        <Check className="h-6 w-6 text-orange-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Verbesserung der Reichweite durch Access Points oder Repeater</h3>
-                        <p className="text-gray-600">Erweitern Sie Ihr WLAN-Netzwerk in alle Bereiche Ihres Hauses.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      navigateToPage('home');
-                      setTimeout(() => {
-                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    }}
-                    className="inline-block mt-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold"
-                  >
-                    Jetzt Beratung anfragen
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+        <ServicePage
+          icon={Wifi}
+          title="WLAN-Optimierung"
+          subtitle="Stabiles Internet in jedem Raum – Analyse, Mesh, Profi-Setup"
+          gradient="from-cyan-500 to-blue-400"
+          features={[
+            { icon: Globe, title: 'Netzwerkanalyse', items: ['Signal-Messung', 'Schwachstellen', 'Störquellen', 'Kanal-Optimierung'] },
+            { icon: Router, title: 'Mesh-Systeme', items: ['TP-Link Deco', 'Fritz! Mesh', 'Access Points', 'WLAN-Extender'] },
+            { icon: Shield, title: 'Sicherheit', items: ['Gastnetzwerk', 'Kindersicherung', 'Verschlüsselung', 'Firewall'] },
+            { icon: Server, title: 'Heimserver', items: ['NAS-Einrichtung', 'Netzwerkdrucker', 'Smart Home Zentrale', 'Media-Server'] },
+          ]}
+        />
       )}
 
       {currentPage === 'support' && (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 pb-16">
-          <section className="relative bg-gradient-to-br from-green-100 via-white to-green-50 py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-3xl mb-6 shadow-2xl">
-                  <Headphones className="h-16 w-16 text-white" />
-                </div>
-                <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">IT-Support</h1>
-                <p className="text-2xl text-gray-600 max-w-3xl mx-auto">Professionelle Hilfe wenn Sie sie brauchen</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-6">Kompetenter IT-Support</h2>
-                  <div className="space-y-6">
-                    <div className="flex gap-4">
-                      <div className="bg-green-100 p-3 rounded-xl h-fit">
-                        <Check className="h-6 w-6 text-green-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Schnelle Hilfe</h3>
-                        <p className="text-gray-600">Wir lösen Ihre technischen Probleme schnell und zuverlässig.</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <div className="bg-blue-100 p-3 rounded-xl h-fit">
-                        <Check className="h-6 w-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Remote & Vor-Ort</h3>
-                        <p className="text-gray-600">Flexibler Service - remote oder bei Ihnen vor Ort.</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <div className="bg-emerald-100 p-3 rounded-xl h-fit">
-                        <Check className="h-6 w-6 text-emerald-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Faire Preise</h3>
-                        <p className="text-gray-600">Transparente Abrechnung ohne versteckte Kosten.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      navigateToPage('home');
-                      setTimeout(() => {
-                        document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    }}
-                    className="inline-block mt-8 bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-semibold"
-                  >
-                    Support anfragen
-                  </button>
-                </div>
-                <div className="bg-gradient-to-br from-green-100 to-emerald-100 rounded-3xl p-8 h-96 flex items-center justify-center">
-                  <div className="text-center">
-                    <Headphones className="h-32 w-32 text-green-500 mx-auto mb-4" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+        <ServicePage
+          icon={Headphones}
+          title="IT-Support"
+          subtitle="Schnelle Hilfe – remote oder vor Ort"
+          gradient="from-green-500 to-emerald-400"
+          features={[
+            { icon: Monitor, title: 'Remote-Support', items: ['TeamViewer', 'AnyDesk', 'Software-Installation', 'Fehlerbehebung'] },
+            { icon: Home, title: 'Vor-Ort Service', items: ['PC-Reparatur', 'Hardware-Fehler', 'Neuaufsetzen', 'Einrichtung'] },
+            { icon: Clock, title: 'Reaktionszeit', items: ['Schnelle Reaktion', 'Termine nach Wunsch', 'Wochenende möglich', 'Notfall-Service'] },
+            { icon: Users, title: 'Für alle', items: ['Windows & Mac', 'Tablets & Smartphones', 'Einweisung', 'Erklärung'] },
+          ]}
+        />
       )}
 
       {currentPage === 'impressum' && (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border-2 border-emerald-100">
-              <h1 className="text-4xl font-bold text-gray-900 mb-8 pb-4 border-b-2 border-emerald-200">Impressum</h1>
-
-              <div className="space-y-8 text-gray-700">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">Angaben gemäß § 5 TMG</h2>
-                  <p className="leading-relaxed">
-                    HomeConnect Solutions GbR<br />
-                    Am Breiten Stein 1<br />
-                    36284 Hohenroda
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">Vertreten durch</h2>
-                  <p className="leading-relaxed">
-                    Jannis Claus<br />
-                    Maximilian Orth
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">Kontakt</h2>
-                  <p className="leading-relaxed">
-                    Telefon: 015204571030<br />
-                    E-Mail: <a href="mailto:info@home-connect-solutions.de" className="text-emerald-600 hover:text-emerald-700 font-semibold">info@home-connect-solutions.de</a>
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">Umsatzsteuer-ID</h2>
-                  <p className="leading-relaxed">
-                    Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-                    Wird auf Anfrage bereitgestellt
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-                  <p className="leading-relaxed">
-                    Jannis Claus<br />
-                    Am breiten Stein 1 ,36284 Hohenroda
-                  </p>
-                </div>
-
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">Haftungsausschluss</h2>
-
-                  <h3 className="font-semibold text-gray-900 mb-2 mt-4">Haftung für Inhalte</h3>
-                  <p className="leading-relaxed mb-4">
-                    Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
-                  </p>
-                  <p className="leading-relaxed mb-4">
-                    Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.
-                  </p>
-
-                  <h3 className="font-semibold text-gray-900 mb-2 mt-4">Haftung für Links</h3>
-                  <p className="leading-relaxed mb-4">
-                    Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.
-                  </p>
-                  <p className="leading-relaxed mb-4">
-                    Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
-                  </p>
-
-                  <h3 className="font-semibold text-gray-900 mb-2 mt-4">Urheberrecht</h3>
-                  <p className="leading-relaxed">
-                    Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
-                  </p>
-                </div>
-
-                <div className="pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 italic">
-                
-                  </p>
-                </div>
+        <div className="min-h-screen bg-black pt-24">
+          <div className="max-w-4xl mx-auto px-6 py-16">
+            <h1 className="text-4xl font-bold text-white mb-8">Impressum</h1>
+            <div className="glass rounded-3xl p-8 space-y-8 text-gray-400">
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-3">Angaben gemäß § 5 TMG</h2>
+                <p>HomeConnect Solutions GbR<br />Am Breiten Stein 1<br />36284 Hohenroda</p>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-3">Vertreten durch</h2>
+                <p>Jannis Claus<br />Maximilian Orth</p>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-3">Kontakt</h2>
+                <p>Telefon: 015204571030<br />E-Mail: info@home-connect-solutions.de</p>
               </div>
             </div>
           </div>
+          <Footer />
         </div>
       )}
 
       {currentPage === 'datenschutz' && (
-        <div className="min-h-screen bg-white py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">Datenschutzerklärung</h1>
-            <div className="prose prose-lg">
-              <p className="text-gray-600">Informationen zum Datenschutz auf Anfrage.</p>
+        <div className="min-h-screen bg-black pt-24">
+          <div className="max-w-4xl mx-auto px-6 py-16">
+            <h1 className="text-4xl font-bold text-white mb-8">Datenschutzerklärung</h1>
+            <div className="glass rounded-3xl p-8 space-y-6 text-gray-400">
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-3">1. Datenschutz auf einen Blick</h2>
+                <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.</p>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-3">2. Verantwortliche Stelle</h2>
+                <p>HomeConnect Solutions GbR<br />Am Breiten Stein 1, 36284 Hohenroda<br />Telefon: 015204571030<br />E-Mail: info@home-connect-solutions.de</p>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-3">3. Datenerfassung</h2>
+                <p>Wenn Sie das Kontaktformular nutzen, werden die eingegebenen Daten zur Bearbeitung Ihrer Anfrage gespeichert und verarbeitet.</p>
+              </div>
             </div>
           </div>
+          <Footer />
         </div>
       )}
-
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-emerald-500 p-2 rounded-lg">
-                  <Leaf className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-lg font-bold">HomeConnect Solutions</span>
-              </div>
-              <p className="text-gray-300">
-                Ihr Partner für nachhaltige Smart Home Lösungen in Osthessen.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-bold mb-4 text-white">Leistungen</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><button onClick={() => navigateToPage('thermostats')} className="hover:text-emerald-400 transition-colors">Smarte Thermostate</button></li>
-                <li><button onClick={() => navigateToPage('wlan')} className="hover:text-emerald-400 transition-colors">WLAN-Optimierung</button></li>
-                <li><button onClick={() => navigateToPage('support')} className="hover:text-emerald-400 transition-colors">IT-Support</button></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold mb-4 text-white">Kontakt</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex items-center">
-                  <Phone className="h-4 w-4 mr-2" />
-                  <span>015204571030</span>
-                </li>
-                <li className="flex items-center">
-                  <Mail className="h-4 w-4 mr-2" />
-                  <a href="mailto:info@home-connect-solutions.de" className="hover:text-emerald-400 transition-colors">
-                    info@home-connect-solutions.de
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold mb-4 text-white">Rechtliches</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><button onClick={() => navigateToPage('impressum')} className="hover:text-emerald-400 transition-colors">Impressum</button></li>
-                <li><button onClick={() => navigateToPage('datenschutz')} className="hover:text-emerald-400 transition-colors">Datenschutz</button></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 HomeConnect Solutions. Alle Rechte vorbehalten.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
-
-export default App;
