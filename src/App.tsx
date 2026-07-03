@@ -13,7 +13,6 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,17 +64,10 @@ export default function App() {
 
   const services = [
     { icon: Monitor, title: 'IT-Dienstleistungen', desc: 'Windows, Mac, PC-Zusammenbau', gradient: 'from-blue-500 to-cyan-400' },
-    { icon: Zap, title: 'Elektrik', desc: 'Smart Home, Thermostate', gradient: 'from-amber-500 to-orange-400' },
-    { icon: Thermometer, title: 'Smarte Thermostate', desc: 'tado°, TP-Link, Fritz', gradient: 'from-orange-500 to-red-400' },
-    { icon: Wifi, title: 'WLAN-Optimierung', desc: 'Mesh, Router, speed', gradient: 'from-cyan-500 to-blue-400' },
+    { icon: Zap, title: 'Elektrik', desc: 'Thermostate, Steckdosen, Lampen', gradient: 'from-amber-500 to-orange-400' },
+    { icon: Thermometer, title: 'Smarte Thermostate', desc: 'tado°, TP-Link Tapo', gradient: 'from-orange-500 to-red-400' },
+    { icon: Wifi, title: 'WLAN-Optimierung', desc: 'Mesh, Router, Netzwerk', gradient: 'from-cyan-500 to-blue-400' },
     { icon: Headphones, title: 'IT-Support', desc: 'Remote & Vor-Ort', gradient: 'from-green-500 to-emerald-400' },
-  ];
-
-  const stats = [
-    { value: '500+', label: 'Zufriedene Kunden' },
-    { value: '24/7', label: 'Support' },
-    { value: '5', label: 'Jahre Erfahrung' },
-    { value: '100%', label: 'Zufriedenheit' },
   ];
 
   const steps = [
@@ -83,19 +75,6 @@ export default function App() {
     { num: '02', title: 'Analyse', desc: 'Wir prüfen Ihre Anforderungen' },
     { num: '03', title: 'Angebot', desc: 'Transparente Preisgestaltung' },
     { num: '04', title: 'Umsetzung', desc: 'Professionelle Realisierung' },
-  ];
-
-  const testimonials = [
-    { name: 'Familie M.', text: 'Endlich stabiles WLAN im ganzen Haus. Super Service!', rating: 5 },
-    { name: 'Thomas K.', text: 'PC wurde schnell repariert. Sehr empfehlenswert.', rating: 5 },
-    { name: 'Sandra B.', text: 'Die smarten Thermostate sparen uns echt Geld.', rating: 5 },
-  ];
-
-  const faqs = [
-    { q: 'Wie schnell könnt ihr vorbeikommen?', a: 'In der Regel innerhalb von 2-3 Werktagen. Dringende Fälle auch schneller.' },
-    { q: 'Bietet ihr auch Fernsupport an?', a: 'Ja, viele Probleme lassen sich per Fernzugriff lösen – schnell und bequem.' },
-    { q: 'Was kostet die Erstberatung?', a: 'Die Erstberatung ist immer kostenlos und unverbindlich.' },
-    { q: 'Arbeitet ihr auch am Wochenende?', a: 'Nach Absprache möglich. Kontaktieren Sie uns für individuelle Termine.' },
   ];
 
   // Navigation Component
@@ -214,11 +193,6 @@ export default function App() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-fade-in">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-          <span className="text-sm text-gray-400">Premium Smart Home Services aus Osthessen</span>
-        </div>
-
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-blur-in">
           <span className="text-white">IT, Elektrik &</span>
           <br />
@@ -226,7 +200,7 @@ export default function App() {
         </h1>
 
         <p className="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          Professionelle IT-Lösungen, smarte Haus-Technik und zuverlässige Elektroarbeiten – alles aus einer Hand.
+          Professionelle IT-Lösungen, smarte Thermostate und zuverlässige Elektroarbeiten – alles aus einer Hand.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-slide-up" style={{ animationDelay: '0.4s' }}>
@@ -234,20 +208,10 @@ export default function App() {
             Kostenlose Beratung
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
-          <button onClick={() => navigateToPage('it')} className="group px-8 py-4 border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/5 transition-all flex items-center gap-2">
-            <Play className="w-5 h-5" />
-            Leistungen entdecken
+          <button onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })} className="group px-8 py-4 border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/5 transition-all flex items-center gap-2">
+            Leistungen ansehen
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
-        </div>
-
-        {/* Floating Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto animate-scale-in" style={{ animationDelay: '0.6s' }}>
-          {stats.map((stat, i) => (
-            <div key={i} className="glass rounded-2xl p-6 hover:bg-white/10 transition-all group">
-              <div className="text-3xl md:text-4xl font-bold gradient-text mb-1">{stat.value}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -262,7 +226,7 @@ export default function App() {
 
   // Services Section
   const ServicesSection = () => (
-    <section className="relative py-32 bg-black">
+    <section id="services" className="relative py-32 bg-black">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
       </div>
@@ -471,79 +435,6 @@ export default function App() {
                 </div>
               )}
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-
-  // Testimonials Section
-  const TestimonialsSection = () => (
-    <section className="relative py-32 bg-black">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
-            <Users className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm text-gray-400">Kundenstimmen</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold">
-            <span className="text-white">Das sagen unsere</span>
-            <span className="gradient-text"> Kunden</span>
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((t, i) => (
-            <div key={i} className="glass rounded-3xl p-8 hover:bg-white/10 transition-all duration-500">
-              <div className="flex gap-1 mb-4">
-                {[...Array(t.rating)].map((_, j) => (
-                  <Star key={j} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-400 mb-6 leading-relaxed">"{t.text}"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
-                  <span className="text-white font-semibold text-sm">{t.name[0]}</span>
-                </div>
-                <span className="text-white font-medium">{t.name}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-
-  // FAQ Section
-  const FaqSection = () => (
-    <section className="relative py-32 bg-gradient-to-b from-black via-blue-950/10 to-black">
-      <div className="max-w-3xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
-            <Settings className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm text-gray-400">FAQ</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold">
-            <span className="text-white">Häufige</span>
-            <span className="gradient-text"> Fragen</span>
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {faqs.map((faq, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-              className="w-full glass rounded-2xl p-6 text-left hover:bg-white/10 transition-all duration-300"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-white font-medium pr-8">{faq.q}</span>
-                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform duration-300 ${activeFaq === i ? 'rotate-180' : ''}`} />
-              </div>
-              <div className={`overflow-hidden transition-all duration-300 ${activeFaq === i ? 'max-h-40 mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <p className="text-gray-500">{faq.a}</p>
-              </div>
-            </button>
           ))}
         </div>
       </div>
@@ -804,8 +695,6 @@ export default function App() {
           <WhyUsSection />
           <SmartHomeSection />
           <ProcessSection />
-          <TestimonialsSection />
-          <FaqSection />
           <ContactSection />
           <Footer />
         </>
