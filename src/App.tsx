@@ -86,7 +86,7 @@ export default function App() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center glow">
               <Home className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-semibold text-white group-hover:text-cyan-400 transition-colors">HomeConnect</span>
+            <span className="text-lg font-semibold text-white group-hover:text-cyan-400 transition-colors">HomeConnectSolutions</span>
           </button>
 
           {/* Desktop Menu */}
@@ -297,7 +297,7 @@ export default function App() {
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 <span className="text-white">Ihre Vorteile</span>
                 <br />
-                <span className="gradient-text">mit HomeConnect</span>
+                <span className="gradient-text">mit HomeConnectSolutions</span>
               </h2>
               <p className="text-xl text-gray-400 mb-10">
                 Zwei Spezialisten unter einem Dach. IT und Elektrik nahtlos vernetzt – für Ihr smartes Zuhause.
@@ -572,7 +572,7 @@ export default function App() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
                 <Home className="w-5 h-5 text-white" />
               </div>
-              <span className="text-lg font-semibold text-white">HomeConnect</span>
+              <span className="text-lg font-semibold text-white">HomeConnectSolutions</span>
             </div>
             <p className="text-gray-500 mb-6">
               IT, Elektrik & Smart Home aus Osthessen. Ihr Partner für intelligente Haustechnik.
@@ -624,7 +624,7 @@ export default function App() {
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} HomeConnect Solutions. Alle Rechte vorbehalten.</p>
+          <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} HomeConnectSolutions. Alle Rechte vorbehalten.</p>
           <p className="text-gray-700 text-xs">Mit Liebe gemacht in Osthessen</p>
         </div>
       </div>
