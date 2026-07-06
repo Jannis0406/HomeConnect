@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Monitor, Wifi, Thermometer, Headphones, ChevronRight, ChevronDown, Phone, Mail, Check, Menu, X, Zap, Shield, Globe, Clock, Users, Star, ArrowRight, Play, Cpu, Server, Cloud, Lock, Settings, Home, Router, Smartphone, Lightbulb, Theater as Thermostat, Cable, Building2, Award, HeartHandshake, Sparkles, Move3d } from 'lucide-react';
+import { Monitor, Wifi, Thermometer, Headphones, ChevronRight, Phone, Mail, Check, Menu, X, Zap, Shield, Globe, Clock, Users, Star, ArrowRight, Cpu, Server, Cloud, Lock, Settings, Home, Router, Smartphone, Lightbulb, Cable, Building2, Award, HeartHandshake, Sparkles, Move3d } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -932,7 +932,7 @@ export default function App() {
   );
 
   // Service Page Template
-  const ServicePage = ({ icon: Icon, title, subtitle, gradient, features, items }: { icon: any, title: string, subtitle: string, gradient: string, features: { icon: any, title: string, items: string[] }[] }) => (
+  const ServicePage = ({ icon: Icon, title, subtitle, gradient, features }: { icon: any, title: string, subtitle: string, gradient: string, features: { icon: any, title: string, items: string[] }[] }) => (
     <div className="min-h-screen bg-black pt-24">
       {/* Hero */}
       <section className="relative py-24 overflow-hidden">
