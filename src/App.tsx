@@ -46,7 +46,7 @@ export default function App() {
       name: formData.get('name'),
       email: formData.get('email'),
       phone: formData.get('phone'),
-      service: formData.get('service'),
+      service_type: formData.get('service') || 'general',
       message: formData.get('message'),
     };
 
@@ -631,6 +631,306 @@ export default function App() {
     </footer>
   );
 
+  // Thermostats Page
+  const ThermostatsPage = () => (
+    <div className="min-h-screen bg-black pt-24">
+      {/* Hero */}
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-orange-500 to-red-400 opacity-20 rounded-full blur-[128px]" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[128px]" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6 text-center">
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-orange-500 to-red-400 flex items-center justify-center mb-8 premium-shadow">
+            <Thermometer className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">Smarte Thermostate</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
+            Intelligent heizen, Energie sparen – bis zu 30% weniger Heizkosten mit tado° oder TP-Link.
+          </p>
+          <button onClick={scrollToContact} className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all inline-flex items-center gap-2">
+            Kostenlose Beratung anfragen
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
+      </section>
+
+      {/* Vorteile */}
+      <section className="py-20 bg-gradient-to-b from-black via-gray-950/50 to-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+              <Zap className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-gray-400">Die Vorteile</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Warum smarte Thermostate?</h2>
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+              Weniger Energie, mehr Komfort – in drei einfachen Vorteilen.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="glass rounded-3xl p-8 text-center hover:bg-white/10 transition-all">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center mb-6">
+                <span className="text-2xl font-bold text-white">30%</span>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Bis zu 30% Ersparnis</h3>
+              <p className="text-gray-500">Weniger Heizkosten durch intelligente Steuerung.</p>
+            </div>
+            <div className="glass rounded-3xl p-8 text-center hover:bg-white/10 transition-all">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center mb-6">
+                <Settings className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Automatische Anpassung</h3>
+              <p className="text-gray-500">Das System lernt Ihre Gewohnheiten und passt sich an.</p>
+            </div>
+            <div className="glass rounded-3xl p-8 text-center hover:bg-white/10 transition-all">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center mb-6">
+                <Smartphone className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Steuerung per App</h3>
+              <p className="text-gray-500">Heizung bequem unterwegs kontrollieren.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Heizungs-Kompatibilität */}
+      <section className="py-20 bg-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+              <Check className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-gray-400">Kompatibilität</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ist Ihre Heizung geeignet?</h2>
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+              Sehen Sie sofort, wie viel Sie sparen können.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              { name: 'Erdgas-Heizung', savings: '15–30%', status: 'Ideal geeignet', color: 'green' },
+              { name: 'Ölheizung', savings: '15–30%', status: 'Ideal geeignet', color: 'green' },
+              { name: 'Pellets / Holz', savings: '5–10%', status: 'Bedingt geeignet', color: 'yellow' },
+              { name: 'Fernwärme', savings: '3–8%', status: 'Bedingt geeignet', color: 'yellow' },
+              { name: 'Wärmepumpe', savings: '0–5%', status: 'Weniger geeignet', color: 'red' },
+              { name: 'Nachtspeicher', savings: '0%', status: 'Nicht geeignet', color: 'red' },
+            ].map((heating, i) => (
+              <div key={i} className="glass rounded-2xl p-6 hover:bg-white/10 transition-all">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-lg font-semibold text-white">{heating.name}</h3>
+                  <span className={`text-sm font-medium px-3 py-1 rounded-full ${
+                    heating.color === 'green' ? 'bg-green-500/20 text-green-400' :
+                    heating.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                  }`}>
+                    {heating.savings} Ersparnis
+                  </span>
+                </div>
+                <p className={`text-sm ${
+                  heating.color === 'green' ? 'text-green-400' :
+                  heating.color === 'yellow' ? 'text-yellow-400' :
+                  'text-red-400'
+                }`}>{heating.status}.</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-gray-500 mb-6">Unsicher? Kostenlose Beratung – wir prüfen Ihre Heizung.</p>
+            <button onClick={scrollToContact} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all inline-flex items-center gap-2">
+              Analyse anfragen
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Pakete */}
+      <section className="py-20 bg-gradient-to-b from-black via-gray-950/50 to-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+              <Star className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-gray-400">Unsere Pakete</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Wählen Sie die passende Lösung</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Basis Paket */}
+            <div className="glass rounded-3xl p-8 hover:bg-white/10 transition-all">
+              <div className="text-center mb-8">
+                <h3 className="text-xl font-bold text-white mb-2">Basis Paket</h3>
+                <p className="text-gray-500 text-sm mb-4">TP-Link Tapo Hardware</p>
+                <div className="text-3xl font-bold gradient-text mb-2">Preis auf Anfrage</div>
+                <p className="text-gray-600 text-sm">nach individueller Beratung</p>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Für normale Heizkörper</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">LED-Display mit Temperaturanzeige</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">App-Steuerung & Zeitpläne</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Sprachsteuerung (Alexa, Google, Siri)</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Geofencing-Funktion</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Professionelle Installation & Support</span>
+                </div>
+              </div>
+
+              <button onClick={scrollToContact} className="w-full py-3 border border-white/20 text-white rounded-xl font-semibold hover:bg-white/5 transition-all">
+                Beratung anfragen
+              </button>
+            </div>
+
+            {/* Premium Paket */}
+            <div className="relative glass rounded-3xl p-8 hover:bg-white/10 transition-all border-2 border-cyan-500/50">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-500 to-cyan-400 text-white text-sm font-semibold rounded-full">
+                EMPFOHLEN
+              </div>
+
+              <div className="text-center mb-8">
+                <h3 className="text-xl font-bold text-white mb-2">Premium Paket</h3>
+                <p className="text-gray-500 text-sm mb-4">tado° Hardware</p>
+                <div className="text-3xl font-bold gradient-text mb-2">Preis auf Anfrage</div>
+                <p className="text-gray-600 text-sm">nach individueller Beratung</p>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Für Heizkörper & Fußbodenheizung</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Premium Touch-Display</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Deutscher Premium-Hersteller (tado°)</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Fenster-Auf-Erkennung integriert</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Wetter-Integration & Geofencing</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Erweiterte App-Funktionen</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-400">Premium-Support & Installation</span>
+                </div>
+              </div>
+
+              <button onClick={scrollToContact} className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all">
+                Beratung anfragen
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vergleichstabelle */}
+      <section className="py-20 bg-black">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+              <Settings className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-gray-400">Direkt-Vergleich</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Alle Features im Überblick</h2>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-4 px-4 text-gray-400 font-medium">Merkmal</th>
+                  <th className="text-center py-4 px-4 text-gray-400 font-medium">Basis (TP-Link)</th>
+                  <th className="text-center py-4 px-4 text-cyan-400 font-medium">Premium (tado°)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Heizkörper</td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Fußbodenheizung</td>
+                  <td className="py-4 px-4 text-center"><X className="w-5 h-5 text-red-400 mx-auto" /></td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Fenster-Auf-Erkennung</td>
+                  <td className="py-4 px-4 text-center text-gray-500">Optional</td>
+                  <td className="py-4 px-4 text-center text-cyan-400">Integriert</td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Display</td>
+                  <td className="py-4 px-4 text-center text-gray-400">Standard LED</td>
+                  <td className="py-4 px-4 text-center text-cyan-400">Touch-Display</td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">App-Steuerung</td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Sprachsteuerung</td>
+                  <td className="py-4 px-4 text-center text-gray-400">Alexa, Google, Siri</td>
+                  <td className="py-4 px-4 text-center text-gray-400">Alexa, Google, Siri</td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Geofencing</td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Wetter-Integration</td>
+                  <td className="py-4 px-4 text-center"><X className="w-5 h-5 text-red-400 mx-auto" /></td>
+                  <td className="py-4 px-4 text-center"><Check className="w-5 h-5 text-green-400 mx-auto" /></td>
+                </tr>
+                <tr className="hover:bg-white/5">
+                  <td className="py-4 px-4 text-gray-300">Preis</td>
+                  <td className="py-4 px-4 text-center text-gray-400">Auf Anfrage</td>
+                  <td className="py-4 px-4 text-center text-cyan-400">Auf Anfrage</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <ContactSection />
+      <Footer />
+    </div>
+  );
+
   // Service Page Template
   const ServicePage = ({ icon: Icon, title, subtitle, gradient, features, items }: { icon: any, title: string, subtitle: string, gradient: string, features: { icon: any, title: string, items: string[] }[] }) => (
     <div className="min-h-screen bg-black pt-24">
@@ -724,7 +1024,7 @@ export default function App() {
           subtitle="Thermostat-Installation und einfache Elektroarbeiten – zuverlässig und sauber"
           gradient="from-amber-500 to-orange-400"
           features={[
-            { icon: Thermometer, title: 'Thermostat-Montage', items: ['tado° Installation', 'TP-Link Tapo', 'Fritz DECT', 'App-Einrichtung'] },
+            { icon: Thermometer, title: 'Thermostat-Montage', items: ['tado° Installation', 'TP-Link Tapo', 'App-Einrichtung'] },
             { icon: Lightbulb, title: 'Beleuchtung', items: ['Deckenlampen', 'Wandleuchten', 'LED-Streifen', 'Außenbeleuchtung'] },
             { icon: Cable, title: 'Steckdosen & Schalter', items: ['Tausch', 'Neuinstallation', 'Smart Home ready', 'USB-Ladesteckdosen'] },
             { icon: Settings, title: 'Reparaturen', items: ['Fehlersuche', 'Kabelreparatur', 'Klingelanlagen', 'Bewegungsmelder'] },
@@ -732,20 +1032,7 @@ export default function App() {
         />
       )}
 
-      {currentPage === 'thermostats' && (
-        <ServicePage
-          icon={Thermometer}
-          title="Smarte Thermostate"
-          subtitle="Bis zu 30% Heizkosten sparen mit tado° oder TP-Link"
-          gradient="from-orange-500 to-red-400"
-          features={[
-            { icon: Thermometer, title: 'tado° Premium', items: ['Touch-Display', 'Fenster-Erkennung', 'Wetter-Integration', 'Fußbodenheizung'] },
-            { icon: Settings, title: 'TP-Link Tapo', items: ['LED-Display', 'App-Steuerung', 'Geofencing', 'Zeitpläne'] },
-            { icon: Smartphone, title: 'App-Steuerung', items: ['iOS & Android', 'Sprachsteuerung', 'Fernbedienung', 'Automatisierung'] },
-            { icon: Shield, title: 'Kompatibilität', items: ['Erdgas-Heizung', 'Ölheizung', 'Fernwärme', 'Pellets'] },
-          ]}
-        />
-      )}
+      {currentPage === 'thermostats' && <ThermostatsPage />}
 
       {currentPage === 'wlan' && (
         <ServicePage
